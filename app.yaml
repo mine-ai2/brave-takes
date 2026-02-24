@@ -15,7 +15,7 @@ services:
     envs:
       - key: NEXT_PUBLIC_SUPABASE_URL
         scope: RUN_AND_BUILD_TIME
-        type: SECRET
+        value: "https://rqgzqpomfojtaltstrrx.supabase.co"
       - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
         scope: RUN_AND_BUILD_TIME
-        type: SECRET
+        value: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJxZ3pxcG9tZm9qdGFsdHN0cnJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2MTA1NzYsImV4cCI6MjA4NzE4NjU3Nn0.EY53tPJl2xWyhGBRwWgzZcsQKm3met_DZwKIiVuiifQ"

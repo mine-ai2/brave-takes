@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
-import TodayClient from './TodayClient'
+import { SessionFlow } from '@/components/session'
+import Navigation from '@/components/Navigation'
+import type { SessionState } from '@/lib/session-types'
 
 export default async function TodayPage() {
   const supabase = await createClient()
@@ -26,28 +28,12 @@ export default async function TodayPage() {
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
   const dayNumber = (diffDays % 14) + 1
 
-  // Get today's rep
-  const { data: rep } = await supabase
-    .from('reps')
-    .select('*')
-    .eq('ladder_name', 'mvp14')
-    .eq('day_number', dayNumber)
-    .single()
-
   // Get today's local date string
   const todayLocal = today.toISOString().split('T')[0]
 
-  // Check if already completed today
-  const { data: completion } = await supabase
-    .from('rep_completions')
-    .select('*')
-    .eq('user_id', user.id)
-    .eq('date_local', todayLocal)
-    .single()
-
-  // Get today's checkin
-  const { data: checkin } = await supabase
-    .from('checkins')
+  // Get existing session state for today (for resume)
+  const { data: sessionState } = await supabase
+    .from('session_states')
     .select('*')
     .eq('user_id', user.id)
     .eq('date_local', todayLocal)
@@ -78,15 +64,38 @@ export default async function TodayPage() {
     }
   }
 
+  // Transform session state for component
+  const initialSession: SessionState | null = sessionState ? {
+    user_id: sessionState.user_id,
+    date_local: sessionState.date_local,
+    current_step: sessionState.current_step,
+    anxiety_level: sessionState.anxiety_level,
+    thought_tag: sessionState.thought_tag,
+    goal_category: sessionState.goal_category,
+    boldness_level: sessionState.boldness_level,
+    action_steps: sessionState.action_steps,
+    selected_action: sessionState.selected_action,
+    identity_choice: sessionState.identity_choice,
+    meditation_track: sessionState.meditation_track,
+    meditation_duration: sessionState.meditation_duration,
+    post_type: sessionState.post_type,
+    post_framework: sessionState.post_framework,
+    post_draft: sessionState.post_draft,
+    recording_url: sessionState.recording_url,
+    reflection_note: sessionState.reflection_note,
+    completed_at: sessionState.completed_at,
+  } : null
+
   return (
-    <TodayClient
-      rep={rep}
-      dayNumber={dayNumber}
-      completion={completion}
-      checkin={checkin}
-      streak={streak}
-      todayLocal={todayLocal}
-      userId={user.id}
-    />
+    <>
+      <SessionFlow
+        userId={user.id}
+        todayLocal={todayLocal}
+        dayNumber={dayNumber}
+        streak={streak}
+        initialSession={initialSession}
+      />
+      <Navigation current="today" />
+    </>
   )
 }

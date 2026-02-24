@@ -52,3 +52,28 @@ export interface Template {
   tone: string | null
   text: string | null
 }
+
+// V2 Session State - stored in Supabase for resume functionality
+export interface SessionStateRecord {
+  id: string
+  user_id: string
+  date_local: string
+  current_step: string
+  anxiety_level: number | null
+  thought_tag: string | null
+  goal_category: string | null
+  boldness_level: number | null
+  action_steps: string[] | null
+  selected_action: string | null
+  identity_choice: string | null
+  meditation_track: string | null
+  meditation_duration: number | null
+  post_type: string | null
+  post_framework: string | null
+  post_draft: string | null
+  recording_url: string | null
+  reflection_note: string | null
+  completed_at: string | null
+  created_at: string
+  updated_at: string
+}
