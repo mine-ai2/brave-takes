@@ -1,3 +1,5 @@
+// Brave Takes Phase 1 Types
+
 export interface Profile {
   id: string
   created_at: string
@@ -5,8 +7,96 @@ export interface Profile {
   avoidance: string | null
   top_fear: string | null
   daily_minutes: number | null
+  // Phase 1 additions
+  selected_track: string | null
+  selected_platforms: string[] | null
+  current_day: number
+  onboarding_complete: boolean
 }
 
+export interface Track {
+  id: string
+  name: string
+  description: string
+  icon: string
+  color: string
+  sort_order: number
+}
+
+export interface TrackMission {
+  id: string
+  track_id: string
+  day_number: number
+  title: string
+  description: string
+  action_prompt: string
+  difficulty: 'easy' | 'medium' | 'brave'
+}
+
+export interface Platform {
+  id: string
+  name: string
+  icon: string
+  color: string
+  sort_order: number
+}
+
+export interface PlatformPrompt {
+  id: string
+  platform_id: string
+  prompt_number: number
+  title: string
+  prompt_text: string
+  example: string | null
+}
+
+export interface Mood {
+  id: string
+  name: string
+  emoji: string
+  affirmations: string[]
+  sort_order: number
+}
+
+export interface DailyCompletion {
+  id: string
+  user_id: string
+  date_local: string
+  mood_id: string | null
+  affirmation_shown: string | null
+  mission_id: string | null
+  platform_prompt_id: string | null
+  completed_at: string | null
+  notes: string | null
+  created_at: string
+}
+
+export interface LoungePost {
+  id: string
+  user_id: string
+  content: string
+  post_type: 'general' | 'win' | 'question' | 'support'
+  likes_count: number
+  created_at: string
+  // Joined data
+  user_display_name?: string
+  user_has_liked?: boolean
+}
+
+export interface LoungeLike {
+  id: string
+  post_id: string
+  user_id: string
+  created_at: string
+}
+
+export interface UserStreak {
+  user_id: string
+  current_streak: number
+  longest_streak: number
+}
+
+// Legacy types for backward compatibility
 export interface Checkin {
   id: string
   user_id: string

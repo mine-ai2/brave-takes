@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import Link from 'next/link'
 import type { Template } from '@/lib/types'
-import Navigation from '@/components/Navigation'
 
 interface Props {
   templates: Template[]
@@ -44,24 +44,34 @@ export default function TemplatesClient({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
       <div className="max-w-md mx-auto p-4 pb-24">
+        {/* Back Button */}
+        <div className="py-4">
+          <Link 
+            href="/today" 
+            className="text-slate-500 hover:text-slate-700 flex items-center gap-1"
+          >
+            ← Back to Today
+          </Link>
+        </div>
+
         <div className="text-center py-6">
-          <h1 className="text-2xl font-bold text-amber-900">Templates</h1>
-          <p className="text-amber-700 mt-1">Get inspired for your posts</p>
+          <h1 className="text-2xl font-bold text-slate-800">Templates</h1>
+          <p className="text-slate-500 mt-1">Get inspired for your posts</p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">Filter</h2>
+        <div className="bg-white rounded-2xl shadow-lg p-6 mb-6 border border-slate-100">
+          <h2 className="text-lg font-semibold text-slate-800 mb-4">Filter</h2>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-sm text-gray-600 mb-2">Platform</label>
+              <label className="block text-sm text-slate-600 mb-2">Platform</label>
               <select
                 value={platform}
                 onChange={(e) => setPlatform(e.target.value)}
-                className="w-full p-3 rounded-xl border border-gray-200 focus:border-amber-400 outline-none"
+                className="w-full p-3 rounded-xl border border-slate-200 focus:border-rose-400 outline-none"
               >
                 <option value="">All platforms</option>
                 {platforms.map((p) => (
@@ -71,11 +81,11 @@ export default function TemplatesClient({
             </div>
 
             <div>
-              <label className="block text-sm text-gray-600 mb-2">Content Type</label>
+              <label className="block text-sm text-slate-600 mb-2">Content Type</label>
               <select
                 value={contentType}
                 onChange={(e) => setContentType(e.target.value)}
-                className="w-full p-3 rounded-xl border border-gray-200 focus:border-amber-400 outline-none"
+                className="w-full p-3 rounded-xl border border-slate-200 focus:border-rose-400 outline-none"
               >
                 <option value="">All types</option>
                 {contentTypes.map((ct) => (
@@ -85,11 +95,11 @@ export default function TemplatesClient({
             </div>
 
             <div>
-              <label className="block text-sm text-gray-600 mb-2">Tone</label>
+              <label className="block text-sm text-slate-600 mb-2">Tone</label>
               <select
                 value={tone}
                 onChange={(e) => setTone(e.target.value)}
-                className="w-full p-3 rounded-xl border border-gray-200 focus:border-amber-400 outline-none"
+                className="w-full p-3 rounded-xl border border-slate-200 focus:border-rose-400 outline-none"
               >
                 <option value="">All tones</option>
                 {tones.map((t) => (
@@ -103,12 +113,12 @@ export default function TemplatesClient({
         {/* Templates */}
         <div className="space-y-4">
           {filteredTemplates.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-lg p-6 text-center text-gray-500">
+            <div className="bg-white rounded-2xl shadow-lg p-6 text-center text-slate-500 border border-slate-100">
               No templates found. Try different filters!
             </div>
           ) : (
             filteredTemplates.map((template) => (
-              <div key={template.id} className="bg-white rounded-2xl shadow-lg p-6">
+              <div key={template.id} className="bg-white rounded-2xl shadow-lg p-6 border border-slate-100">
                 <div className="flex gap-2 mb-3">
                   {template.platform && (
                     <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
@@ -126,10 +136,10 @@ export default function TemplatesClient({
                     </span>
                   )}
                 </div>
-                <p className="text-gray-800 mb-4">{template.text}</p>
+                <p className="text-slate-700 mb-4">{template.text}</p>
                 <button
                   onClick={() => copyToClipboard(template.text || '')}
-                  className="w-full py-2 bg-amber-100 hover:bg-amber-200 text-amber-800 font-medium rounded-xl transition-colors"
+                  className="w-full py-2 bg-rose-100 hover:bg-rose-200 text-rose-700 font-medium rounded-xl transition-colors"
                 >
                   📋 Copy
                 </button>
@@ -138,8 +148,6 @@ export default function TemplatesClient({
           )}
         </div>
       </div>
-
-      <Navigation current="templates" />
     </div>
   )
 }
