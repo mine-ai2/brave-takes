@@ -7,9 +7,10 @@ interface Props {
   streak: number
   dayNumber: number
   longestStreak: number
+  isCreativeMode?: boolean
 }
 
-export default function CompletionCelebration({ streak, dayNumber, longestStreak }: Props) {
+export default function CompletionCelebration({ streak, dayNumber, longestStreak, isCreativeMode = false }: Props) {
   const [confetti, setConfetti] = useState(false)
 
   useEffect(() => {
@@ -19,6 +20,14 @@ export default function CompletionCelebration({ streak, dayNumber, longestStreak
   }, [])
 
   const getStreakMessage = () => {
+    if (isCreativeMode) {
+      if (streak >= 21) return "21 days of creative exploration! You're an artist. 🎨"
+      if (streak >= 14) return "Two weeks of creative practice! Your voice is evolving."
+      if (streak >= 7) return "One week of discovery! The creative habit is forming."
+      if (streak >= 3) return "Three days exploring! Keep playing."
+      if (streak === 1) return "First creative session complete! Discovery begins here."
+      return `${streak} days of creative practice!`
+    }
     if (streak >= 21) return "You've completed the entire track! 🏆"
     if (streak >= 14) return "Two weeks strong! You're unstoppable!"
     if (streak >= 7) return "One week down! The habit is forming!"

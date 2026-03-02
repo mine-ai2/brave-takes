@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import DailyFlow from '@/components/daily/DailyFlow'
-import type { Profile, Track, TrackMission, Platform, PlatformPrompt, Mood, DailyCompletion } from '@/lib/types'
+import type { Profile, Track, TrackMission, Platform, PlatformPrompt, CreativePrompt, Mood, DailyCompletion } from '@/lib/types'
 
 export default async function TodayPage() {
   const supabase = await createClient()
@@ -31,6 +31,7 @@ export default async function TodayPage() {
     missionRes,
     platformsRes,
     promptsRes,
+    creativePromptsRes,
     moodsRes,
     completionRes,
     streakRes,
@@ -53,6 +54,10 @@ export default async function TodayPage() {
       .select('*')
       .in('platform_id', profile.selected_platforms || [])
       .order('prompt_number'),
+    // Get creative prompts
+    supabase.from('creative_prompts')
+      .select('*')
+      .order('sort_order'),
     // Get moods
     supabase.from('moods').select('*').order('sort_order'),
     // Get today's completion
@@ -72,6 +77,7 @@ export default async function TodayPage() {
   const mission = missionRes.data as TrackMission
   const platforms = (platformsRes.data || []) as Platform[]
   const prompts = (promptsRes.data || []) as PlatformPrompt[]
+  const creativePrompts = (creativePromptsRes.data || []) as CreativePrompt[]
   const moods = (moodsRes.data || []) as Mood[]
   const completion = completionRes.data as DailyCompletion | null
   const streak = streakRes.data as { current_streak: number; longest_streak: number } | null
@@ -85,6 +91,7 @@ export default async function TodayPage() {
         mission={mission}
         platforms={platforms}
         prompts={prompts}
+        creativePrompts={creativePrompts}
         moods={moods}
         todayLocal={todayLocal}
         existingCompletion={completion}

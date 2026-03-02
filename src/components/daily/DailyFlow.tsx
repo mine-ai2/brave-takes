@@ -1,16 +1,18 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import type { Profile, Track, TrackMission, Platform, PlatformPrompt, Mood, DailyCompletion } from '@/lib/types'
+import type { Profile, Track, TrackMission, Platform, PlatformPrompt, CreativePrompt, Mood, DailyCompletion } from '@/lib/types'
 import MoodCheckIn from './MoodCheckIn'
 import AffirmationDisplay from './AffirmationDisplay'
 import MissionCard from './MissionCard'
 import PlatformPromptCard from './PlatformPromptCard'
+import CreativePromptCard from './CreativePromptCard'
 import CompletionCelebration from './CompletionCelebration'
 
 type FlowStep = 'mood' | 'affirmation' | 'mission' | 'prompt' | 'complete' | 'already-done'
+type Mode = 'structured' | 'creative'
 
 interface Props {
   userId: string
@@ -19,6 +21,7 @@ interface Props {
   mission: TrackMission
   platforms: Platform[]
   prompts: PlatformPrompt[]
+  creativePrompts: CreativePrompt[]
   moods: Mood[]
   todayLocal: string
   existingCompletion: DailyCompletion | null
@@ -33,6 +36,7 @@ export default function DailyFlow({
   mission,
   platforms,
   prompts,
+  creativePrompts,
   moods,
   todayLocal,
   existingCompletion,
@@ -43,22 +47,40 @@ export default function DailyFlow({
   const supabase = createClient()
   
   const [step, setStep] = useState<FlowStep>(existingCompletion?.completed_at ? 'already-done' : 'mood')
+  const [mode, setMode] = useState<Mode>(profile.preferred_mode || 'structured')
   const [selectedMood, setSelectedMood] = useState<Mood | null>(null)
   const [currentAffirmation, setCurrentAffirmation] = useState<string>('')
-  const [selectedPrompt, setSelectedPrompt] = useState<PlatformPrompt | null>(null)
+  const [selectedPlatformPrompt, setSelectedPlatformPrompt] = useState<PlatformPrompt | null>(null)
+  const [selectedCreativePrompt, setSelectedCreativePrompt] = useState<CreativePrompt | null>(null)
   const [saving, setSaving] = useState(false)
 
   // Get a random prompt from the user's selected platforms
-  const getRandomPrompt = () => {
+  const getRandomPlatformPrompt = () => {
     if (prompts.length === 0) return null
     const randomIndex = Math.floor(Math.random() * prompts.length)
     return prompts[randomIndex]
   }
 
+  // Get a random creative prompt
+  const getRandomCreativePrompt = () => {
+    if (creativePrompts.length === 0) return null
+    const randomIndex = Math.floor(Math.random() * creativePrompts.length)
+    return creativePrompts[randomIndex]
+  }
+
+  // Handle mode toggle
+  const handleModeToggle = async (newMode: Mode) => {
+    setMode(newMode)
+    // Save preference to profile
+    await supabase
+      .from('profiles')
+      .update({ preferred_mode: newMode })
+      .eq('id', userId)
+  }
+
   // Handle mood selection
   const handleMoodSelect = (mood: Mood) => {
     setSelectedMood(mood)
-    // Use the mood's affirmation
     setCurrentAffirmation(mood.affirmation)
     setStep('affirmation')
   }
@@ -70,8 +92,13 @@ export default function DailyFlow({
 
   // Handle mission continue
   const handleMissionContinue = () => {
-    const prompt = getRandomPrompt()
-    setSelectedPrompt(prompt)
+    if (mode === 'creative') {
+      const prompt = getRandomCreativePrompt()
+      setSelectedCreativePrompt(prompt)
+    } else {
+      const prompt = getRandomPlatformPrompt()
+      setSelectedPlatformPrompt(prompt)
+    }
     setStep('prompt')
   }
 
@@ -89,7 +116,9 @@ export default function DailyFlow({
           mood_id: selectedMood?.id,
           affirmation_shown: currentAffirmation,
           mission_id: mission?.id,
-          platform_prompt_id: selectedPrompt?.id,
+          platform_prompt_id: mode === 'structured' ? selectedPlatformPrompt?.id : null,
+          creative_prompt_id: mode === 'creative' ? selectedCreativePrompt?.id : null,
+          mode_used: mode,
           completed_at: new Date().toISOString(),
         }, {
           onConflict: 'user_id,date_local',
@@ -115,15 +144,59 @@ export default function DailyFlow({
 
   // Get platform for current prompt
   const getCurrentPlatform = () => {
-    if (!selectedPrompt) return null
-    return platforms.find(p => p.id === selectedPrompt.platform_id)
+    if (!selectedPlatformPrompt) return null
+    return platforms.find(p => p.id === selectedPlatformPrompt.platform_id)
   }
 
+  // Get category label for creative prompts
+  const getCategoryLabel = (category: string) => {
+    const labels: Record<string, string> = {
+      tone: 'Tone Exploration',
+      character: 'Character Work',
+      cinematic: 'Cinematic',
+      trending: 'Trending',
+      experimental: 'Experimental',
+      craft: 'Craft Fundamentals',
+    }
+    return labels[category] || category
+  }
+
+  // Background class based on mode
+  const bgClass = mode === 'creative' 
+    ? 'min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-rose-50'
+    : 'min-h-screen bg-gradient-to-b from-slate-50 to-slate-100'
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+    <div className={bgClass}>
       <div className="max-w-md mx-auto p-4 pb-24">
         {/* Header */}
         <div className="text-center py-6">
+          {/* Mode Toggle */}
+          <div className="flex justify-center mb-4">
+            <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-slate-100">
+              <button
+                onClick={() => handleModeToggle('structured')}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                  mode === 'structured'
+                    ? 'bg-slate-800 text-white'
+                    : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                Structured
+              </button>
+              <button
+                onClick={() => handleModeToggle('creative')}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
+                  mode === 'creative'
+                    ? 'bg-gradient-to-r from-orange-500 to-rose-500 text-white'
+                    : 'text-slate-500 hover:text-slate-700'
+                }`}
+              >
+                Creative
+              </button>
+            </div>
+          </div>
+
           <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 mb-4">
             <span className="text-lg">{track?.icon || '🦁'}</span>
             <span className="font-medium text-slate-700">Day {profile.current_day}</span>
@@ -134,9 +207,12 @@ export default function DailyFlow({
               </span>
             )}
           </div>
-          <h1 className="text-2xl font-bold text-slate-800">
-            {track?.name || 'Your Journey'}
+          <h1 className={`text-2xl font-bold ${mode === 'creative' ? 'font-serif text-slate-800' : 'text-slate-800'}`}>
+            {mode === 'creative' ? 'Creative Practice' : (track?.name || 'Your Journey')}
           </h1>
+          {mode === 'creative' && (
+            <p className="text-slate-500 text-sm mt-1">Explore. Experiment. Play.</p>
+          )}
         </div>
 
         {/* Flow Steps */}
@@ -158,14 +234,25 @@ export default function DailyFlow({
             track={track}
             dayNumber={profile.current_day}
             onContinue={handleMissionContinue}
+            isCreativeMode={mode === 'creative'}
           />
         )}
 
-        {step === 'prompt' && selectedPrompt && (
+        {step === 'prompt' && mode === 'structured' && selectedPlatformPrompt && (
           <PlatformPromptCard
-            prompt={selectedPrompt}
+            prompt={selectedPlatformPrompt}
             platform={getCurrentPlatform()!}
             onComplete={handleComplete}
+            saving={saving}
+          />
+        )}
+
+        {step === 'prompt' && mode === 'creative' && selectedCreativePrompt && (
+          <CreativePromptCard
+            prompt={selectedCreativePrompt}
+            categoryLabel={getCategoryLabel(selectedCreativePrompt.category)}
+            onComplete={handleComplete}
+            onShuffle={() => setSelectedCreativePrompt(getRandomCreativePrompt())}
             saving={saving}
           />
         )}
@@ -175,6 +262,7 @@ export default function DailyFlow({
             streak={currentStreak + 1}
             dayNumber={profile.current_day}
             longestStreak={Math.max(longestStreak, currentStreak + 1)}
+            isCreativeMode={mode === 'creative'}
           />
         )}
 

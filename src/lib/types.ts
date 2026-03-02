@@ -12,6 +12,8 @@ export interface Profile {
   selected_platforms: string[] | null
   current_day: number
   onboarding_complete: boolean
+  // Phase 2 additions
+  preferred_mode: 'structured' | 'creative'
 }
 
 export interface Track {
@@ -50,6 +52,16 @@ export interface PlatformPrompt {
   example: string | null
 }
 
+export interface CreativePrompt {
+  id: string
+  category: string
+  title: string
+  prompt_text: string
+  example: string | null
+  difficulty: number
+  sort_order: number
+}
+
 export interface Mood {
   id: string
   name: string
@@ -66,6 +78,8 @@ export interface DailyCompletion {
   affirmation_shown: string | null
   mission_id: string | null
   platform_prompt_id: string | null
+  creative_prompt_id: string | null
+  mode_used: 'structured' | 'creative' | null
   completed_at: string | null
   notes: string | null
   created_at: string

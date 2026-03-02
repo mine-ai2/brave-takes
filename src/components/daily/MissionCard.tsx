@@ -7,9 +7,10 @@ interface Props {
   track: Track
   dayNumber: number
   onContinue: () => void
+  isCreativeMode?: boolean
 }
 
-export default function MissionCard({ mission, track, dayNumber, onContinue }: Props) {
+export default function MissionCard({ mission, track, dayNumber, onContinue, isCreativeMode = false }: Props) {
   const getDifficultyColor = (difficulty: number) => {
     if (difficulty <= 1) return 'bg-emerald-100 text-emerald-700'
     if (difficulty === 2) return 'bg-amber-100 text-amber-700'
@@ -77,7 +78,7 @@ export default function MissionCard({ mission, track, dayNumber, onContinue }: P
         onClick={onContinue}
         className="w-full py-4 px-6 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-rose-200"
       >
-        Get my platform prompt →
+        {isCreativeMode ? 'Get my creative prompt →' : 'Get my platform prompt →'}
       </button>
     </div>
   )
