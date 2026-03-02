@@ -28,9 +28,9 @@ export interface TrackMission {
   track_id: string
   day_number: number
   title: string
-  description: string
-  action_prompt: string
-  difficulty: 'easy' | 'medium' | 'brave'
+  instructions: string
+  why_it_works: string | null
+  difficulty: number
 }
 
 export interface Platform {
@@ -54,7 +54,7 @@ export interface Mood {
   id: string
   name: string
   emoji: string
-  affirmations: string[]
+  affirmation: string
   sort_order: number
 }
 

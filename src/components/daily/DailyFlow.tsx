@@ -58,9 +58,8 @@ export default function DailyFlow({
   // Handle mood selection
   const handleMoodSelect = (mood: Mood) => {
     setSelectedMood(mood)
-    // Get random affirmation for this mood
-    const randomAffirmation = mood.affirmations[Math.floor(Math.random() * mood.affirmations.length)]
-    setCurrentAffirmation(randomAffirmation)
+    // Use the mood's affirmation
+    setCurrentAffirmation(mood.affirmation)
     setStep('affirmation')
   }
 
