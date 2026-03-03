@@ -3,11 +3,12 @@
 import Link from 'next/link'
 
 interface Props {
-  current: 'today' | 'lounge' | 'progress' | 'settings'
+  current: 'today' | 'vault' | 'lounge' | 'progress' | 'settings'
 }
 
 const navItems = [
   { id: 'today', label: 'Today', icon: '🎯', href: '/today' },
+  { id: 'vault', label: 'Vault', icon: '💡', href: '/vault' },
   { id: 'lounge', label: 'Lounge', icon: '💬', href: '/lounge' },
   { id: 'progress', label: 'Progress', icon: '📊', href: '/progress' },
   { id: 'settings', label: 'Settings', icon: '⚙️', href: '/settings' },
