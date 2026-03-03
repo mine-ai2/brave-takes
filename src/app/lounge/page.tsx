@@ -20,6 +20,19 @@ export default async function LoungePage() {
     console.error('Error fetching posts:', postsError)
   }
 
+  // Get unique user IDs from posts
+  const userIds = [...new Set((posts || []).map(p => p.user_id))]
+  
+  // Get profiles for all post authors
+  const { data: profiles } = await supabase
+    .from('profiles')
+    .select('id, display_name')
+    .in('id', userIds.length > 0 ? userIds : ['none'])
+
+  const profileMap = new Map(
+    (profiles || []).map(p => [p.id, p.display_name])
+  )
+
   // Get user's likes
   const { data: userLikes } = await supabase
     .from('lounge_likes')
@@ -28,25 +41,33 @@ export default async function LoungePage() {
 
   const userLikedPostIds = new Set(userLikes?.map(l => l.post_id) || [])
 
-  // Transform posts
+  // Transform posts with actual display names
   const transformedPosts = (posts || []).map(post => ({
     ...post,
-    user_display_name: `Brave Creator ${post.user_id.slice(0, 4)}`,
+    user_display_name: profileMap.get(post.user_id) || `Brave Creator`,
     user_has_liked: userLikedPostIds.has(post.id),
   }))
 
-  // Get user's streak for display
-  const { data: streak } = await supabase
-    .from('user_streaks')
-    .select('current_streak')
-    .eq('user_id', user.id)
-    .single()
+  // Get user's streak and profile for display
+  const [{ data: streak }, { data: userProfile }] = await Promise.all([
+    supabase
+      .from('user_streaks')
+      .select('current_streak')
+      .eq('user_id', user.id)
+      .single(),
+    supabase
+      .from('profiles')
+      .select('display_name')
+      .eq('id', user.id)
+      .single()
+  ])
 
   return (
     <>
       <LoungeClient 
         initialPosts={transformedPosts} 
         userId={user.id}
+        userDisplayName={userProfile?.display_name || 'Brave Creator'}
         userStreak={streak?.current_streak || 0}
       />
       <Navigation current="lounge" />

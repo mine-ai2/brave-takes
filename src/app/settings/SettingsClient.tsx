@@ -16,6 +16,7 @@ export default function SettingsClient({ profile, tracks, platforms, userEmail }
   const router = useRouter()
   const supabase = createClient()
   
+  const [displayName, setDisplayName] = useState(profile?.display_name || '')
   const [selectedTrack, setSelectedTrack] = useState(profile?.selected_track || '')
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(profile?.selected_platforms || [])
   const [saving, setSaving] = useState(false)
@@ -38,6 +39,7 @@ export default function SettingsClient({ profile, tracks, platforms, userEmail }
     const { error } = await supabase
       .from('profiles')
       .update({
+        display_name: displayName.trim() || null,
         selected_track: selectedTrack,
         selected_platforms: selectedPlatforms,
       })
@@ -86,6 +88,21 @@ export default function SettingsClient({ profile, tracks, platforms, userEmail }
           <h2 className="font-semibold text-slate-800 mb-4">Account</h2>
           
           <div className="space-y-4">
+            <div>
+              <label className="text-sm text-slate-500 block mb-1">Display Name</label>
+              <input
+                type="text"
+                value={displayName}
+                onChange={(e) => {
+                  setDisplayName(e.target.value)
+                  setSaved(false)
+                }}
+                placeholder="Enter your name"
+                className="w-full p-3 border border-slate-200 rounded-xl focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all text-slate-800"
+              />
+              <p className="text-xs text-slate-400 mt-1">This is how you&apos;ll appear in The Lounge</p>
+            </div>
+            
             <div>
               <label className="text-sm text-slate-500">Email</label>
               <p className="text-slate-800 font-medium">{userEmail}</p>

@@ -10,6 +10,7 @@ type PostType = 'general' | 'win' | 'question' | 'support'
 interface Props {
   initialPosts: LoungePost[]
   userId: string
+  userDisplayName: string
   userStreak: number
 }
 
@@ -20,7 +21,7 @@ const POST_TYPES: { id: PostType; label: string; emoji: string }[] = [
   { id: 'support', label: 'Support', emoji: '💪' },
 ]
 
-export default function LoungeClient({ initialPosts, userId, userStreak }: Props) {
+export default function LoungeClient({ initialPosts, userId, userDisplayName, userStreak }: Props) {
   const router = useRouter()
   const supabase = createClient()
   
@@ -56,7 +57,7 @@ export default function LoungeClient({ initialPosts, userId, userStreak }: Props
     // Add to local state
     setPosts([{
       ...data,
-      user_display_name: `Brave Creator ${userId.slice(0, 4)}`,
+      user_display_name: userDisplayName,
       user_has_liked: false,
     }, ...posts])
     

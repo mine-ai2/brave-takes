@@ -14,6 +14,7 @@ export interface Profile {
   onboarding_complete: boolean
   // Phase 2 additions
   preferred_mode: 'structured' | 'creative'
+  display_name: string | null
 }
 
 export interface Track {
