@@ -9,17 +9,16 @@ export default async function LoungePage() {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // Get lounge posts with user likes
-  const { data: posts } = await supabase
+  // Get lounge posts
+  const { data: posts, error: postsError } = await supabase
     .from('lounge_posts')
-    .select(`
-      *,
-      profiles:user_id (
-        id
-      )
-    `)
+    .select('*')
     .order('created_at', { ascending: false })
     .limit(50)
+  
+  if (postsError) {
+    console.error('Error fetching posts:', postsError)
+  }
 
   // Get user's likes
   const { data: userLikes } = await supabase

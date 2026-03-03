@@ -48,6 +48,7 @@ export default function LoungeClient({ initialPosts, userId, userStreak }: Props
 
     if (error) {
       console.error('Error posting:', error)
+      alert('Error posting: ' + error.message)
       setPosting(false)
       return
     }
@@ -62,6 +63,9 @@ export default function LoungeClient({ initialPosts, userId, userStreak }: Props
     setNewPost('')
     setIsComposing(false)
     setPosting(false)
+    
+    // Refresh to get server state
+    router.refresh()
   }
 
   const handleLike = async (postId: string, hasLiked: boolean) => {
