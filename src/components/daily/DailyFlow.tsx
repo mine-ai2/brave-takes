@@ -7,11 +7,12 @@ import type { Profile, Track, TrackMission, Platform, PlatformPrompt, CreativePr
 import MoodCheckIn from './MoodCheckIn'
 import AffirmationDisplay from './AffirmationDisplay'
 import MissionCard from './MissionCard'
+import PlatformSelector from './PlatformSelector'
 import PlatformPromptCard from './PlatformPromptCard'
 import CreativePromptCard from './CreativePromptCard'
 import CompletionCelebration from './CompletionCelebration'
 
-type FlowStep = 'mood' | 'affirmation' | 'mission' | 'prompt' | 'complete' | 'already-done'
+type FlowStep = 'mood' | 'affirmation' | 'mission' | 'platform-select' | 'prompt' | 'complete' | 'already-done'
 type Mode = 'structured' | 'creative'
 
 interface Props {
@@ -50,15 +51,22 @@ export default function DailyFlow({
   const [mode, setMode] = useState<Mode>(profile.preferred_mode || 'structured')
   const [selectedMood, setSelectedMood] = useState<Mood | null>(null)
   const [currentAffirmation, setCurrentAffirmation] = useState<string>('')
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null)
   const [selectedPlatformPrompt, setSelectedPlatformPrompt] = useState<PlatformPrompt | null>(null)
   const [selectedCreativePrompt, setSelectedCreativePrompt] = useState<CreativePrompt | null>(null)
   const [saving, setSaving] = useState(false)
 
-  // Get a random prompt from the user's selected platforms
-  const getRandomPlatformPrompt = () => {
-    if (prompts.length === 0) return null
-    const randomIndex = Math.floor(Math.random() * prompts.length)
-    return prompts[randomIndex]
+  // Get prompts for a specific platform
+  const getPromptsForPlatform = (platformId: string) => {
+    return prompts.filter(p => p.platform_id === platformId)
+  }
+
+  // Get a random prompt from the selected platform
+  const getRandomPlatformPrompt = (platformId: string) => {
+    const platformPrompts = getPromptsForPlatform(platformId)
+    if (platformPrompts.length === 0) return null
+    const randomIndex = Math.floor(Math.random() * platformPrompts.length)
+    return platformPrompts[randomIndex]
   }
 
   // Get a random creative prompt
@@ -95,10 +103,18 @@ export default function DailyFlow({
     if (mode === 'creative') {
       const prompt = getRandomCreativePrompt()
       setSelectedCreativePrompt(prompt)
+      setStep('prompt')
     } else {
-      const prompt = getRandomPlatformPrompt()
-      setSelectedPlatformPrompt(prompt)
+      // Go to platform selection for structured mode
+      setStep('platform-select')
     }
+  }
+
+  // Handle platform selection
+  const handlePlatformSelect = (platform: Platform) => {
+    setSelectedPlatform(platform)
+    const prompt = getRandomPlatformPrompt(platform.id)
+    setSelectedPlatformPrompt(prompt)
     setStep('prompt')
   }
 
@@ -140,12 +156,6 @@ export default function DailyFlow({
     }
     
     setSaving(false)
-  }
-
-  // Get platform for current prompt
-  const getCurrentPlatform = () => {
-    if (!selectedPlatformPrompt) return null
-    return platforms.find(p => p.id === selectedPlatformPrompt.platform_id)
   }
 
   // Get category label for creative prompts
@@ -238,13 +248,37 @@ export default function DailyFlow({
           />
         )}
 
-        {step === 'prompt' && mode === 'structured' && selectedPlatformPrompt && (
+        {step === 'platform-select' && mode === 'structured' && (
+          <PlatformSelector
+            platforms={platforms}
+            onSelect={handlePlatformSelect}
+          />
+        )}
+
+        {step === 'prompt' && mode === 'structured' && selectedPlatformPrompt && selectedPlatform && (
           <PlatformPromptCard
             prompt={selectedPlatformPrompt}
-            platform={getCurrentPlatform()!}
+            platform={selectedPlatform}
             onComplete={handleComplete}
             saving={saving}
           />
+        )}
+
+        {step === 'prompt' && mode === 'structured' && !selectedPlatformPrompt && (
+          <div className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100 text-center">
+            <div className="text-4xl mb-4">📝</div>
+            <h2 className="text-xl font-bold text-slate-800 mb-2">No prompts available</h2>
+            <p className="text-slate-500 mb-6">
+              There are no prompts for this platform yet. Try creative mode or complete today without a specific prompt.
+            </p>
+            <button
+              onClick={handleComplete}
+              disabled={saving}
+              className="w-full py-4 px-6 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold rounded-xl transition-all"
+            >
+              {saving ? 'Saving...' : '✅ Complete anyway'}
+            </button>
+          </div>
         )}
 
         {step === 'prompt' && mode === 'creative' && selectedCreativePrompt && (
@@ -255,6 +289,23 @@ export default function DailyFlow({
             onShuffle={() => setSelectedCreativePrompt(getRandomCreativePrompt())}
             saving={saving}
           />
+        )}
+
+        {step === 'prompt' && mode === 'creative' && !selectedCreativePrompt && (
+          <div className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100 text-center">
+            <div className="text-4xl mb-4">🎨</div>
+            <h2 className="text-xl font-bold text-slate-800 mb-2">No creative prompts yet</h2>
+            <p className="text-slate-500 mb-6">
+              Creative prompts haven&apos;t been added yet. Try structured mode or complete today without a prompt.
+            </p>
+            <button
+              onClick={handleComplete}
+              disabled={saving}
+              className="w-full py-4 px-6 bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white font-semibold rounded-xl transition-all"
+            >
+              {saving ? 'Saving...' : '✅ Complete anyway'}
+            </button>
+          </div>
         )}
 
         {step === 'complete' && (
