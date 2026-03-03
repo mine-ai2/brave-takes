@@ -55,6 +55,7 @@ export default function DailyFlow({
   const [selectedPlatformPrompt, setSelectedPlatformPrompt] = useState<PlatformPrompt | null>(null)
   const [selectedCreativePrompt, setSelectedCreativePrompt] = useState<CreativePrompt | null>(null)
   const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   // Get prompts for a specific platform
   const getPromptsForPlatform = (platformId: string) => {
@@ -121,10 +122,11 @@ export default function DailyFlow({
   // Handle completion
   const handleComplete = async () => {
     setSaving(true)
+    setError(null)
     
     try {
       // Save the daily completion
-      const { error } = await supabase
+      const { error: completionError } = await supabase
         .from('daily_completions')
         .upsert({
           user_id: userId,
@@ -140,19 +142,30 @@ export default function DailyFlow({
           onConflict: 'user_id,date_local',
         })
 
-      if (error) throw error
+      if (completionError) {
+        console.error('Completion error:', completionError)
+        setError(`Save failed: ${completionError.message}`)
+        setSaving(false)
+        return
+      }
 
       // Update profile current_day (cycle through 1-21)
       const nextDay = profile.current_day >= 21 ? 1 : profile.current_day + 1
-      await supabase
+      const { error: profileError } = await supabase
         .from('profiles')
         .update({ current_day: nextDay })
         .eq('id', userId)
+
+      if (profileError) {
+        console.error('Profile update error:', profileError)
+        // Don't block completion for profile update failure
+      }
 
       setStep('complete')
       router.refresh()
     } catch (err) {
       console.error('Error saving completion:', err)
+      setError('Something went wrong. Please try again.')
     }
     
     setSaving(false)
@@ -224,6 +237,19 @@ export default function DailyFlow({
             <p className="text-slate-500 text-sm mt-1">Explore. Experiment. Play.</p>
           )}
         </div>
+
+        {/* Error Display */}
+        {error && (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
+            <p className="text-red-700 text-sm">{error}</p>
+            <button 
+              onClick={() => setError(null)}
+              className="text-red-500 text-xs mt-2 underline"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
 
         {/* Flow Steps */}
         {step === 'mood' && (
