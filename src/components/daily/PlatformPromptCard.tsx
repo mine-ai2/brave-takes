@@ -6,10 +6,11 @@ interface Props {
   prompt: PlatformPrompt
   platform: Platform
   onComplete: () => void
+  onShuffle: () => void
   saving: boolean
 }
 
-export default function PlatformPromptCard({ prompt, platform, onComplete, saving }: Props) {
+export default function PlatformPromptCard({ prompt, platform, onComplete, onShuffle, saving }: Props) {
   const getPlatformGradient = (color: string) => {
     const gradients: Record<string, string> = {
       pink: 'from-pink-500 to-rose-500',
@@ -36,11 +37,20 @@ export default function PlatformPromptCard({ prompt, platform, onComplete, savin
       </h2>
 
       {/* Prompt Text */}
-      <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 mb-6">
+      <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 mb-4">
         <p className="text-slate-700 leading-relaxed">
           {prompt.prompt_text}
         </p>
       </div>
+
+      {/* Shuffle Button */}
+      <button
+        onClick={onShuffle}
+        className="w-full mb-6 py-2 text-slate-500 hover:text-slate-700 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+      >
+        <span>🔀</span>
+        <span>Try a different prompt</span>
+      </button>
 
       {/* Example */}
       {prompt.example && (

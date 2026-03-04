@@ -360,6 +360,7 @@ export default function DailyFlow({
             prompt={selectedPlatformPrompt}
             platform={selectedPlatform}
             onComplete={handleComplete}
+            onShuffle={() => setSelectedPlatformPrompt(getRandomPlatformPrompt(selectedPlatform.id))}
             saving={saving}
           />
         )}
