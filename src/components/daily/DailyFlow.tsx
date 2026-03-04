@@ -316,7 +316,14 @@ export default function DailyFlow({
 
         {/* Flow Steps */}
         {step === 'mood' && (
-          <MoodCheckIn moods={moods} onSelect={handleMoodSelect} />
+          <MoodCheckIn 
+            moods={moods} 
+            onSelect={handleMoodSelect}
+            mode={mode}
+            onModeChange={handleModeToggle}
+            structuredDone={structuredDone}
+            creativeDone={creativeDone}
+          />
         )}
 
         {step === 'affirmation' && (
