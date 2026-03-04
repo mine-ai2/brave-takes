@@ -11,11 +11,55 @@ interface Props {
   userId: string
 }
 
-const CATEGORIES: { id: Category; label: string; emoji: string; placeholder: string }[] = [
-  { id: 'hooks', label: 'Hooks', emoji: '🎣', placeholder: 'A great opening line or hook...' },
-  { id: 'characters', label: 'Characters', emoji: '🎭', placeholder: 'A character voice idea...' },
-  { id: 'commercials', label: 'Commercials', emoji: '📺', placeholder: 'A commercial concept...' },
-  { id: 'captions', label: 'Captions', emoji: '✍️', placeholder: 'A caption draft...' },
+const CATEGORIES: { id: Category; label: string; emoji: string; placeholder: string; examples: string[] }[] = [
+  { 
+    id: 'hooks', 
+    label: 'Hooks', 
+    emoji: '🎣', 
+    placeholder: 'A great opening line or hook...',
+    examples: [
+      '"They said I couldn\'t do it. They were almost right."',
+      '"What if I told you everything you know about [X] is wrong?"',
+      '"Three seconds. That\'s all you get to make them care."',
+      '"I used to think voice acting was just talking. Then I learned..."',
+    ]
+  },
+  { 
+    id: 'characters', 
+    label: 'Characters', 
+    emoji: '🎭', 
+    placeholder: 'A character voice idea...',
+    examples: [
+      'Wise grandpa who gives advice through cooking metaphors',
+      'Overenthusiastic GPS that takes your life choices personally',
+      'Tired medieval narrator who\'s seen too many quests',
+      'Luxury brand spokesperson for mundane items (toilet paper, socks)',
+    ]
+  },
+  { 
+    id: 'commercials', 
+    label: 'Commercials', 
+    emoji: '📺', 
+    placeholder: 'A commercial concept...',
+    examples: [
+      'Car commercial but whispered like a bedtime story',
+      'Fast food ad in documentary narrator style',
+      'Insurance commercial as an epic movie trailer',
+      'Tech product launch but make it cozy and intimate',
+    ]
+  },
+  { 
+    id: 'captions', 
+    label: 'Captions', 
+    emoji: '✍️', 
+    placeholder: 'A caption draft...',
+    examples: [
+      'POV: You finally nail that character voice after 47 takes',
+      'The mic doesn\'t lie. Neither does the playback. 😅',
+      'Day [X] of showing up for my voice. Small steps, big dreams.',
+      'Behind every smooth read is a pile of outtakes and cold coffee.',
+    ]
+  },
 ]
 
 export default function VaultClient({ initialItems, userId }: Props) {
@@ -175,13 +219,37 @@ export default function VaultClient({ initialItems, userId }: Props) {
         {/* Items List */}
         <div className="space-y-3">
           {filteredItems.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-lg p-8 text-center border border-slate-100">
-              <div className="text-4xl mb-3">{activeConfig.emoji}</div>
-              <h3 className="text-lg font-semibold text-slate-800 mb-1">
-                No {activeConfig.label.toLowerCase()} yet
-              </h3>
-              <p className="text-slate-500 text-sm">
-                Start capturing your {activeConfig.label.toLowerCase()} ideas!
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-100">
+              <div className="text-center mb-4">
+                <div className="text-4xl mb-2">{activeConfig.emoji}</div>
+                <h3 className="text-lg font-semibold text-slate-800 mb-1">
+                  No {activeConfig.label.toLowerCase()} yet
+                </h3>
+                <p className="text-slate-500 text-sm">
+                  Here are some examples to inspire you:
+                </p>
+              </div>
+              
+              <div className="space-y-2">
+                {activeConfig.examples.map((example, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setNewContent(example)
+                      setIsAdding(true)
+                    }}
+                    className="w-full p-3 bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl text-left text-sm text-slate-600 hover:from-rose-50 hover:to-orange-50 hover:text-slate-800 transition-all border border-transparent hover:border-rose-200"
+                  >
+                    <div className="flex items-start gap-2">
+                      <span className="text-rose-400 mt-0.5">+</span>
+                      <span className="italic">{example}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              
+              <p className="text-xs text-slate-400 mt-4 text-center">
+                Tap an example to add it, or create your own!
               </p>
             </div>
           ) : (

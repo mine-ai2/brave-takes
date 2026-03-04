@@ -158,8 +158,48 @@ export default function DailyFlow({
 
       if (profileError) {
         console.error('Profile update error:', profileError)
-        // Don't block completion for profile update failure
       }
+
+      // Update streak
+      const today = new Date(todayLocal)
+      const yesterday = new Date(today)
+      yesterday.setDate(yesterday.getDate() - 1)
+      const yesterdayStr = yesterday.toISOString().split('T')[0]
+
+      // Get current streak record
+      const { data: streakData } = await supabase
+        .from('user_streaks')
+        .select('*')
+        .eq('user_id', userId)
+        .single()
+
+      let newCurrentStreak = 1
+      let newLongestStreak = 1
+
+      if (streakData) {
+        // Check if yesterday was completed (continuing streak)
+        if (streakData.last_completed_date === yesterdayStr) {
+          newCurrentStreak = (streakData.current_streak || 0) + 1
+        } else if (streakData.last_completed_date === todayLocal) {
+          // Already completed today, keep current streak
+          newCurrentStreak = streakData.current_streak || 1
+        }
+        // else: streak broken, start at 1
+        
+        newLongestStreak = Math.max(newCurrentStreak, streakData.longest_streak || 0)
+      }
+
+      // Upsert streak record
+      await supabase
+        .from('user_streaks')
+        .upsert({
+          user_id: userId,
+          current_streak: newCurrentStreak,
+          longest_streak: newLongestStreak,
+          last_completed_date: todayLocal,
+        }, {
+          onConflict: 'user_id',
+        })
 
       setStep('complete')
       router.refresh()
@@ -351,10 +391,53 @@ export default function DailyFlow({
             <h2 className="text-2xl font-bold text-slate-800 mb-3">
               You&apos;ve already completed today!
             </h2>
-            <p className="text-slate-600 mb-6">
-              Come back tomorrow for your next mission. Rest up, you&apos;ve earned it.
+            <p className="text-slate-600 mb-4">
+              Your mission is done. Here&apos;s what you can do next:
             </p>
-            <div className="bg-slate-50 rounded-xl p-4 mb-6">
+            
+            {/* Continue Learning Options */}
+            <div className="space-y-3 mb-6">
+              <a
+                href="/vault"
+                className="block w-full py-3 px-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl text-left hover:border-amber-300 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">💡</span>
+                  <div>
+                    <div className="font-medium text-slate-800">Capture Ideas</div>
+                    <div className="text-sm text-slate-500">Save hooks, characters, or concepts</div>
+                  </div>
+                </div>
+              </a>
+              
+              <a
+                href="/lounge"
+                className="block w-full py-3 px-4 bg-gradient-to-r from-rose-50 to-pink-50 border border-rose-200 rounded-xl text-left hover:border-rose-300 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">💬</span>
+                  <div>
+                    <div className="font-medium text-slate-800">Visit The Lounge</div>
+                    <div className="text-sm text-slate-500">Connect with other creators</div>
+                  </div>
+                </div>
+              </a>
+              
+              <a
+                href="/progress"
+                className="block w-full py-3 px-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl text-left hover:border-blue-300 transition-all"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">📊</span>
+                  <div>
+                    <div className="font-medium text-slate-800">Review Progress</div>
+                    <div className="text-sm text-slate-500">See your journey so far</div>
+                  </div>
+                </div>
+              </a>
+            </div>
+
+            <div className="bg-slate-50 rounded-xl p-4 mb-4">
               <div className="flex justify-center gap-8">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-orange-500">{currentStreak}</div>
@@ -366,7 +449,7 @@ export default function DailyFlow({
                 </div>
               </div>
             </div>
-            <p className="text-slate-500 text-sm">
+            <p className="text-slate-400 text-sm">
               Next mission: Day {profile.current_day >= 21 ? 1 : profile.current_day + 1}
             </p>
           </div>
