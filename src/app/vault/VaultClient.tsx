@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { VaultItem } from './page'
 
-type Category = 'hooks' | 'characters' | 'commercials' | 'captions'
+type Category = 'hooks' | 'cta' | 'characters' | 'commercials' | 'captions'
 
 interface Props {
   initialItems: VaultItem[]
@@ -26,6 +26,20 @@ const ALL_EXAMPLES: Record<Category, string[]> = {
     '"The one thing holding you back isn\'t talent."',
     '"Plot twist: The rejection was the best thing that happened."',
     '"What I wish I knew before my first booking..."',
+  ],
+  cta: [
+    'Drop a 🎤 if you\'re working on your voice today!',
+    'Follow for daily voice acting tips and motivation.',
+    'Save this for your next audition prep.',
+    'Tag someone who needs to hear this!',
+    'Comment your biggest VO challenge below 👇',
+    'Share this with a fellow voice actor who\'s grinding.',
+    'DM me "BRAVE" for my free warm-up routine.',
+    'Link in bio for more voice acting resources.',
+    'Hit follow if you want to level up your voice.',
+    'Double tap if this resonates! ❤️',
+    'What\'s YOUR voice goal this week? Tell me below!',
+    'Repost to inspire another creator today.',
   ],
   characters: [
     'Wise grandpa who gives advice through cooking metaphors',
@@ -73,6 +87,7 @@ const ALL_EXAMPLES: Record<Category, string[]> = {
 
 const CATEGORIES: { id: Category; label: string; emoji: string; placeholder: string }[] = [
   { id: 'hooks', label: 'Hooks', emoji: '🎣', placeholder: 'A great opening line or hook...' },
+  { id: 'cta', label: 'CTAs', emoji: '📣', placeholder: 'A call to action...' },
   { id: 'characters', label: 'Characters', emoji: '🎭', placeholder: 'A character voice idea...' },
   { id: 'commercials', label: 'Commercials', emoji: '📺', placeholder: 'A commercial concept...' },
   { id: 'captions', label: 'Captions', emoji: '✍️', placeholder: 'A caption draft...' },
