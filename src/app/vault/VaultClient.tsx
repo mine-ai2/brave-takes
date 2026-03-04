@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { VaultItem } from './page'
 
@@ -11,56 +11,89 @@ interface Props {
   userId: string
 }
 
-const CATEGORIES: { id: Category; label: string; emoji: string; placeholder: string; examples: string[] }[] = [
-  { 
-    id: 'hooks', 
-    label: 'Hooks', 
-    emoji: '🎣', 
-    placeholder: 'A great opening line or hook...',
-    examples: [
-      '"They said I couldn\'t do it. They were almost right."',
-      '"What if I told you everything you know about [X] is wrong?"',
-      '"Three seconds. That\'s all you get to make them care."',
-      '"I used to think voice acting was just talking. Then I learned..."',
-    ]
-  },
-  { 
-    id: 'characters', 
-    label: 'Characters', 
-    emoji: '🎭', 
-    placeholder: 'A character voice idea...',
-    examples: [
-      'Wise grandpa who gives advice through cooking metaphors',
-      'Overenthusiastic GPS that takes your life choices personally',
-      'Tired medieval narrator who\'s seen too many quests',
-      'Luxury brand spokesperson for mundane items (toilet paper, socks)',
-    ]
-  },
-  { 
-    id: 'commercials', 
-    label: 'Commercials', 
-    emoji: '📺', 
-    placeholder: 'A commercial concept...',
-    examples: [
-      'Car commercial but whispered like a bedtime story',
-      'Fast food ad in documentary narrator style',
-      'Insurance commercial as an epic movie trailer',
-      'Tech product launch but make it cozy and intimate',
-    ]
-  },
-  { 
-    id: 'captions', 
-    label: 'Captions', 
-    emoji: '✍️', 
-    placeholder: 'A caption draft...',
-    examples: [
-      'POV: You finally nail that character voice after 47 takes',
-      'The mic doesn\'t lie. Neither does the playback. 😅',
-      'Day [X] of showing up for my voice. Small steps, big dreams.',
-      'Behind every smooth read is a pile of outtakes and cold coffee.',
-    ]
-  },
+// All examples - we'll rotate through these daily
+const ALL_EXAMPLES: Record<Category, string[]> = {
+  hooks: [
+    '"They said I couldn\'t do it. They were almost right."',
+    '"What if I told you everything you know about [X] is wrong?"',
+    '"Three seconds. That\'s all you get to make them care."',
+    '"I used to think voice acting was just talking. Then I learned..."',
+    '"Stop scrolling. This one\'s for you."',
+    '"The secret nobody tells beginners..."',
+    '"I made every mistake so you don\'t have to."',
+    '"This changed everything for me."',
+    '"Here\'s what 100 auditions taught me..."',
+    '"The one thing holding you back isn\'t talent."',
+    '"Plot twist: The rejection was the best thing that happened."',
+    '"What I wish I knew before my first booking..."',
+  ],
+  characters: [
+    'Wise grandpa who gives advice through cooking metaphors',
+    'Overenthusiastic GPS that takes your life choices personally',
+    'Tired medieval narrator who\'s seen too many quests',
+    'Luxury brand spokesperson for mundane items (toilet paper, socks)',
+    'Conspiracy theorist weather reporter',
+    'Dramatic movie trailer voice for everyday activities',
+    'Sarcastic AI assistant who\'s done with humans',
+    'Cheerful pirate reading bedtime stories',
+    'Grumpy cat food critic',
+    'Overly calm crisis hotline for minor inconveniences',
+    'Southern grandma explaining technology',
+    'Noir detective narrating a trip to the grocery store',
+  ],
+  commercials: [
+    'Car commercial but whispered like a bedtime story',
+    'Fast food ad in documentary narrator style',
+    'Insurance commercial as an epic movie trailer',
+    'Tech product launch but make it cozy and intimate',
+    'Luxury perfume ad but for coffee',
+    'Action movie trailer for a vacuum cleaner',
+    'Meditation app but it\'s for pizza delivery',
+    'Sports energy drink but make it ASMR',
+    'Real estate listing as a horror movie trailer',
+    'Dating app promo in nature documentary style',
+    'Bank commercial as a children\'s story',
+    'Gym membership ad but noir detective style',
+  ],
+  captions: [
+    'POV: You finally nail that character voice after 47 takes',
+    'The mic doesn\'t lie. Neither does the playback. 😅',
+    'Day [X] of showing up for my voice. Small steps, big dreams.',
+    'Behind every smooth read is a pile of outtakes and cold coffee.',
+    'My neighbors definitely think I\'m unhinged.',
+    'Plot twist: The "bad take" was actually the keeper.',
+    'Booth hair, don\'t care.',
+    'Me vs. my voice vs. impostor syndrome. Daily battle.',
+    'Recording in a closet hits different at 2am.',
+    'When the director says "one more take" for the 15th time...',
+    'Just talked to myself professionally for 3 hours. Living the dream.',
+    'The audition I almost didn\'t send? Booked it.',
+  ],
+}
+
+const CATEGORIES: { id: Category; label: string; emoji: string; placeholder: string }[] = [
+  { id: 'hooks', label: 'Hooks', emoji: '🎣', placeholder: 'A great opening line or hook...' },
+  { id: 'characters', label: 'Characters', emoji: '🎭', placeholder: 'A character voice idea...' },
+  { id: 'commercials', label: 'Commercials', emoji: '📺', placeholder: 'A commercial concept...' },
+  { id: 'captions', label: 'Captions', emoji: '✍️', placeholder: 'A caption draft...' },
 ]
+
+// Get today's examples - rotates daily
+function getDailyExamples(category: Category, count: number = 4): string[] {
+  const allExamples = ALL_EXAMPLES[category]
+  const today = new Date()
+  // Use day of year as seed so examples change daily
+  const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000)
+  
+  // Shuffle based on day
+  const shuffled = [...allExamples]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = (dayOfYear + i * 7) % (i + 1)
+    ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  
+  return shuffled.slice(0, count)
+}
 
 export default function VaultClient({ initialItems, userId }: Props) {
   const supabase = createClient()
@@ -73,6 +106,9 @@ export default function VaultClient({ initialItems, userId }: Props) {
 
   const filteredItems = items.filter(item => item.category === activeCategory)
   const activeConfig = CATEGORIES.find(c => c.id === activeCategory)!
+  
+  // Get today's rotating examples for the active category
+  const dailyExamples = useMemo(() => getDailyExamples(activeCategory, 4), [activeCategory])
 
   const handleAdd = async () => {
     if (!newContent.trim()) return
@@ -260,7 +296,7 @@ export default function VaultClient({ initialItems, userId }: Props) {
           </div>
           
           <div className="space-y-2">
-            {activeConfig.examples.map((example, idx) => (
+            {dailyExamples.map((example, idx) => (
               <button
                 key={idx}
                 onClick={() => {
