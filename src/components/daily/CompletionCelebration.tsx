@@ -8,9 +8,18 @@ interface Props {
   dayNumber: number
   longestStreak: number
   isCreativeMode?: boolean
+  otherModeAvailable?: boolean
+  onStartOtherMode?: () => void
 }
 
-export default function CompletionCelebration({ streak, dayNumber, longestStreak, isCreativeMode = false }: Props) {
+export default function CompletionCelebration({ 
+  streak, 
+  dayNumber, 
+  longestStreak, 
+  isCreativeMode = false,
+  otherModeAvailable = false,
+  onStartOtherMode,
+}: Props) {
   const [confetti, setConfetti] = useState(false)
 
   useEffect(() => {
@@ -98,6 +107,18 @@ export default function CompletionCelebration({ streak, dayNumber, longestStreak
 
         {/* Actions */}
         <div className="space-y-3">
+          {otherModeAvailable && onStartOtherMode && (
+            <button
+              onClick={onStartOtherMode}
+              className={`w-full py-4 px-6 font-semibold rounded-xl transition-all shadow-lg ${
+                isCreativeMode
+                  ? 'bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white shadow-slate-200'
+                  : 'bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white shadow-orange-200'
+              }`}
+            >
+              {isCreativeMode ? '📋 Try Structured Mode Too' : '🎨 Try Creative Mode Too'}
+            </button>
+          )}
           <Link
             href="/lounge"
             className="block w-full py-4 px-6 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-rose-200"

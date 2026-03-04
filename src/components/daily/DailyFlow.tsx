@@ -25,7 +25,8 @@ interface Props {
   creativePrompts: CreativePrompt[]
   moods: Mood[]
   todayLocal: string
-  existingCompletion: DailyCompletion | null
+  structuredDone: boolean
+  creativeDone: boolean
   currentStreak: number
   longestStreak: number
 }
@@ -40,15 +41,29 @@ export default function DailyFlow({
   creativePrompts,
   moods,
   todayLocal,
-  existingCompletion,
+  structuredDone,
+  creativeDone,
   currentStreak,
   longestStreak,
 }: Props) {
   const router = useRouter()
   const supabase = createClient()
   
-  const [step, setStep] = useState<FlowStep>(existingCompletion?.completed_at ? 'already-done' : 'mood')
-  const [mode, setMode] = useState<Mode>(profile.preferred_mode || 'structured')
+  // Determine initial state based on what's completed
+  const getInitialStep = (): FlowStep => {
+    if (structuredDone && creativeDone) return 'already-done'
+    return 'mood'
+  }
+  
+  // Determine initial mode - prefer the one not yet done
+  const getInitialMode = (): Mode => {
+    if (structuredDone && !creativeDone) return 'creative'
+    if (creativeDone && !structuredDone) return 'structured'
+    return profile.preferred_mode || 'structured'
+  }
+  
+  const [step, setStep] = useState<FlowStep>(getInitialStep())
+  const [mode, setMode] = useState<Mode>(getInitialMode())
   const [selectedMood, setSelectedMood] = useState<Mood | null>(null)
   const [currentAffirmation, setCurrentAffirmation] = useState<string>('')
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null)
@@ -125,7 +140,7 @@ export default function DailyFlow({
     setError(null)
     
     try {
-      // Save the daily completion
+      // Save the daily completion (separate record per mode)
       const { error: completionError } = await supabase
         .from('daily_completions')
         .upsert({
@@ -139,7 +154,7 @@ export default function DailyFlow({
           mode_used: mode,
           completed_at: new Date().toISOString(),
         }, {
-          onConflict: 'user_id,date_local',
+          onConflict: 'user_id,date_local,mode_used',
         })
 
       if (completionError) {
@@ -238,23 +253,31 @@ export default function DailyFlow({
           <div className="flex justify-center mb-4">
             <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-slate-100">
               <button
-                onClick={() => handleModeToggle('structured')}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                  mode === 'structured'
+                onClick={() => !structuredDone && handleModeToggle('structured')}
+                disabled={structuredDone}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
+                  structuredDone
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : mode === 'structured'
                     ? 'bg-slate-800 text-white'
                     : 'text-slate-500 hover:text-slate-700'
                 }`}
               >
+                {structuredDone && <span>✓</span>}
                 Structured
               </button>
               <button
-                onClick={() => handleModeToggle('creative')}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                  mode === 'creative'
+                onClick={() => !creativeDone && handleModeToggle('creative')}
+                disabled={creativeDone}
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
+                  creativeDone
+                    ? 'bg-emerald-100 text-emerald-700'
+                    : mode === 'creative'
                     ? 'bg-gradient-to-r from-orange-500 to-rose-500 text-white'
                     : 'text-slate-500 hover:text-slate-700'
                 }`}
               >
+                {creativeDone && <span>✓</span>}
                 Creative
               </button>
             </div>
@@ -380,6 +403,18 @@ export default function DailyFlow({
             dayNumber={profile.current_day}
             longestStreak={Math.max(longestStreak, currentStreak + 1)}
             isCreativeMode={mode === 'creative'}
+            otherModeAvailable={mode === 'creative' ? !structuredDone : !creativeDone}
+            onStartOtherMode={() => {
+              // Switch to the other mode and restart flow
+              const newMode = mode === 'creative' ? 'structured' : 'creative'
+              setMode(newMode)
+              setStep('mood')
+              setSelectedMood(null)
+              setCurrentAffirmation('')
+              setSelectedPlatform(null)
+              setSelectedPlatformPrompt(null)
+              setSelectedCreativePrompt(null)
+            }}
           />
         )}
 

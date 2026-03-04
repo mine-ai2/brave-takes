@@ -60,12 +60,11 @@ export default async function TodayPage() {
       .order('sort_order'),
     // Get moods
     supabase.from('moods').select('*').order('sort_order'),
-    // Get today's completion
+    // Get today's completions (could be multiple - one per mode)
     supabase.from('daily_completions')
       .select('*')
       .eq('user_id', user.id)
-      .eq('date_local', todayLocal)
-      .single(),
+      .eq('date_local', todayLocal),
     // Get streak
     supabase.from('user_streaks')
       .select('*')
@@ -79,8 +78,12 @@ export default async function TodayPage() {
   const prompts = (promptsRes.data || []) as PlatformPrompt[]
   const creativePrompts = (creativePromptsRes.data || []) as CreativePrompt[]
   const moods = (moodsRes.data || []) as Mood[]
-  const completion = completionRes.data as DailyCompletion | null
+  const completions = (completionRes.data || []) as DailyCompletion[]
   const streak = streakRes.data as { current_streak: number; longest_streak: number } | null
+
+  // Check which modes have been completed today
+  const structuredDone = completions.some(c => c.mode_used === 'structured' && c.completed_at)
+  const creativeDone = completions.some(c => c.mode_used === 'creative' && c.completed_at)
 
   return (
     <>
@@ -94,7 +97,8 @@ export default async function TodayPage() {
         creativePrompts={creativePrompts}
         moods={moods}
         todayLocal={todayLocal}
-        existingCompletion={completion}
+        structuredDone={structuredDone}
+        creativeDone={creativeDone}
         currentStreak={streak?.current_streak || 0}
         longestStreak={streak?.longest_streak || 0}
       />
