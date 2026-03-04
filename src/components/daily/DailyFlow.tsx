@@ -20,7 +20,7 @@ interface Props {
   userId: string
   profile: Profile
   track: Track
-  mission: TrackMission
+  allMissions: TrackMission[]
   platforms: Platform[]
   prompts: PlatformPrompt[]
   creativePrompts: CreativePrompt[]
@@ -36,7 +36,7 @@ export default function DailyFlow({
   userId,
   profile,
   track,
-  mission,
+  allMissions,
   platforms,
   prompts,
   creativePrompts,
@@ -65,6 +65,11 @@ export default function DailyFlow({
   
   const [step, setStep] = useState<FlowStep>(getInitialStep())
   const [mode, setMode] = useState<Mode>(getInitialMode())
+  
+  // Mission state - start with today's mission, allow shuffling
+  const todaysMission = allMissions.find(m => m.day_number === profile.current_day) || allMissions[0]
+  const [currentMission, setCurrentMission] = useState<TrackMission>(todaysMission)
+  
   const [selectedMood, setSelectedMood] = useState<Mood | null>(null)
   const [emotionValue, setEmotionValue] = useState<number>(50)
   const [emotionLabel, setEmotionLabel] = useState<string>('')
@@ -99,6 +104,14 @@ export default function DailyFlow({
     if (creativePrompts.length === 0) return null
     const randomIndex = Math.floor(Math.random() * creativePrompts.length)
     return creativePrompts[randomIndex]
+  }
+
+  // Get a random different mission
+  const getRandomMission = () => {
+    if (allMissions.length <= 1) return currentMission
+    const otherMissions = allMissions.filter(m => m.id !== currentMission.id)
+    const randomIndex = Math.floor(Math.random() * otherMissions.length)
+    return otherMissions[randomIndex]
   }
 
   // Handle mode toggle
@@ -164,7 +177,7 @@ export default function DailyFlow({
           date_local: todayLocal,
           mood_id: selectedMood?.id,
           affirmation_shown: currentAffirmation,
-          mission_id: mission?.id,
+          mission_id: currentMission?.id,
           platform_prompt_id: mode === 'structured' ? selectedPlatformPrompt?.id : null,
           creative_prompt_id: mode === 'creative' ? selectedCreativePrompt?.id : null,
           mode_used: mode,
@@ -366,10 +379,11 @@ export default function DailyFlow({
 
         {step === 'mission' && (
           <MissionCard
-            mission={mission}
+            mission={currentMission}
             track={track}
             dayNumber={profile.current_day}
             onContinue={handleMissionContinue}
+            onShuffle={() => setCurrentMission(getRandomMission())}
             isCreativeMode={mode === 'creative'}
           />
         )}

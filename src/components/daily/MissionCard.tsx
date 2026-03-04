@@ -7,10 +7,11 @@ interface Props {
   track: Track
   dayNumber: number
   onContinue: () => void
+  onShuffle?: () => void
   isCreativeMode?: boolean
 }
 
-export default function MissionCard({ mission, track, dayNumber, onContinue, isCreativeMode = false }: Props) {
+export default function MissionCard({ mission, track, dayNumber, onContinue, onShuffle, isCreativeMode = false }: Props) {
   const getDifficultyColor = (difficulty: number) => {
     if (difficulty <= 1) return 'bg-emerald-100 text-emerald-700'
     if (difficulty === 2) return 'bg-amber-100 text-amber-700'
@@ -72,6 +73,17 @@ export default function MissionCard({ mission, track, dayNumber, onContinue, isC
           />
         </div>
       </div>
+
+      {/* Shuffle Button */}
+      {onShuffle && (
+        <button
+          onClick={onShuffle}
+          className="w-full mb-3 py-2 text-slate-500 hover:text-slate-700 text-sm font-medium flex items-center justify-center gap-2 transition-colors"
+        >
+          <span>🔀</span>
+          <span>Try a different mission</span>
+        </button>
+      )}
 
       {/* Continue Button */}
       <button

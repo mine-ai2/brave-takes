@@ -38,12 +38,11 @@ export default async function TodayPage() {
   ] = await Promise.all([
     // Get selected track
     supabase.from('tracks').select('*').eq('id', profile.selected_track).single(),
-    // Get today's mission
+    // Get ALL missions for the track (for shuffle feature)
     supabase.from('track_missions')
       .select('*')
       .eq('track_id', profile.selected_track)
-      .eq('day_number', profile.current_day)
-      .single(),
+      .order('day_number'),
     // Get selected platforms
     supabase.from('platforms')
       .select('*')
@@ -73,7 +72,7 @@ export default async function TodayPage() {
   ])
 
   const track = trackRes.data as Track
-  const mission = missionRes.data as TrackMission
+  const allMissions = (missionRes.data || []) as TrackMission[]
   const platforms = (platformsRes.data || []) as Platform[]
   const prompts = (promptsRes.data || []) as PlatformPrompt[]
   const creativePrompts = (creativePromptsRes.data || []) as CreativePrompt[]
@@ -91,7 +90,7 @@ export default async function TodayPage() {
         userId={user.id}
         profile={profile}
         track={track}
-        mission={mission}
+        allMissions={allMissions}
         platforms={platforms}
         prompts={prompts}
         creativePrompts={creativePrompts}
