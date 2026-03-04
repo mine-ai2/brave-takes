@@ -218,67 +218,74 @@ export default function VaultClient({ initialItems, userId }: Props) {
 
         {/* Items List */}
         <div className="space-y-3">
-          {filteredItems.length === 0 ? (
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-100">
-              <div className="text-center mb-4">
-                <div className="text-4xl mb-2">{activeConfig.emoji}</div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-1">
-                  No {activeConfig.label.toLowerCase()} yet
-                </h3>
-                <p className="text-slate-500 text-sm">
-                  Here are some examples to inspire you:
-                </p>
-              </div>
-              
-              <div className="space-y-2">
-                {activeConfig.examples.map((example, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => {
-                      setNewContent(example)
-                      setIsAdding(true)
-                    }}
-                    className="w-full p-3 bg-gradient-to-r from-slate-50 to-slate-100 rounded-xl text-left text-sm text-slate-600 hover:from-rose-50 hover:to-orange-50 hover:text-slate-800 transition-all border border-transparent hover:border-rose-200"
-                  >
-                    <div className="flex items-start gap-2">
-                      <span className="text-rose-400 mt-0.5">+</span>
-                      <span className="italic">{example}</span>
-                    </div>
-                  </button>
-                ))}
-              </div>
-              
-              <p className="text-xs text-slate-400 mt-4 text-center">
-                Tap an example to add it, or create your own!
+          {filteredItems.length === 0 && (
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-100 text-center">
+              <div className="text-4xl mb-2">{activeConfig.emoji}</div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-1">
+                No {activeConfig.label.toLowerCase()} yet
+              </h3>
+              <p className="text-slate-500 text-sm">
+                Check out the ideas below for inspiration!
               </p>
             </div>
-          ) : (
-            filteredItems.map((item) => (
-              <div key={item.id} className="bg-white rounded-2xl shadow-lg p-4 border border-slate-100 group">
-                <div className="flex justify-between items-start gap-3">
-                  <p className="text-slate-700 leading-relaxed whitespace-pre-wrap flex-1">
-                    {item.content}
-                  </p>
-                  <button
-                    onClick={() => handleDelete(item.id)}
-                    className="text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 p-1"
-                  >
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                  </button>
-                </div>
-                <p className="text-xs text-slate-400 mt-2">
-                  {getTimeAgo(item.created_at)}
-                </p>
-              </div>
-            ))
           )}
+          
+          {filteredItems.map((item) => (
+            <div key={item.id} className="bg-white rounded-2xl shadow-lg p-4 border border-slate-100 group">
+              <div className="flex justify-between items-start gap-3">
+                <p className="text-slate-700 leading-relaxed whitespace-pre-wrap flex-1">
+                  {item.content}
+                </p>
+                <button
+                  onClick={() => handleDelete(item.id)}
+                  className="text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100 p-1"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+              <p className="text-xs text-slate-400 mt-2">
+                {getTimeAgo(item.created_at)}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Inspiration Section - ALWAYS visible */}
+        <div className="mt-6 bg-gradient-to-br from-amber-50 to-orange-50 rounded-2xl p-4 border border-amber-100">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-lg">💡</span>
+            <h3 className="font-semibold text-slate-700">Need inspiration?</h3>
+          </div>
+          
+          <div className="space-y-2">
+            {activeConfig.examples.map((example, idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  setNewContent(example)
+                  setIsAdding(true)
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }}
+                className="w-full p-3 bg-white/70 rounded-xl text-left text-sm text-slate-600 hover:bg-white hover:text-slate-800 transition-all border border-transparent hover:border-amber-200 hover:shadow-sm"
+              >
+                <div className="flex items-start gap-2">
+                  <span className="text-amber-500 mt-0.5">+</span>
+                  <span className="italic">{example}</span>
+                </div>
+              </button>
+            ))}
+          </div>
+          
+          <p className="text-xs text-amber-600/70 mt-3 text-center">
+            Tap any idea to add it to your vault
+          </p>
         </div>
 
         {/* Stats */}
         {items.length > 0 && (
-          <div className="mt-8 text-center">
+          <div className="mt-6 text-center">
             <p className="text-slate-400 text-sm">
               {items.length} idea{items.length !== 1 ? 's' : ''} saved in your vault
             </p>
