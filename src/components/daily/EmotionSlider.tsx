@@ -89,13 +89,6 @@ export default function EmotionSlider({ onContinue }: Props) {
         </div>
       </div>
 
-      {/* Affirmation Preview */}
-      <div className="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl p-4 mb-6 border border-rose-100">
-        <p className="text-slate-600 text-center italic">
-          "{getAffirmation(value)}"
-        </p>
-      </div>
-
       {/* Continue Button */}
       <button
         onClick={() => onContinue(value, getLabel(value))}
@@ -105,7 +98,7 @@ export default function EmotionSlider({ onContinue }: Props) {
       </button>
 
       <p className="text-center text-slate-400 text-xs mt-4">
-        Every feeling is valid. Start where you are.
+        Just a quick vibe check. No wrong answers!
       </p>
     </div>
   )

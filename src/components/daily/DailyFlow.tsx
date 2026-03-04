@@ -13,7 +13,7 @@ import PlatformPromptCard from './PlatformPromptCard'
 import CreativePromptCard from './CreativePromptCard'
 import CompletionCelebration from './CompletionCelebration'
 
-type FlowStep = 'mood' | 'affirmation' | 'mission' | 'platform-select' | 'prompt' | 'complete' | 'already-done'
+type FlowStep = 'emotion-slider' | 'mood' | 'affirmation' | 'mission' | 'platform-select' | 'prompt' | 'complete' | 'already-done'
 type Mode = 'structured' | 'creative'
 
 interface Props {
@@ -53,7 +53,7 @@ export default function DailyFlow({
   // Determine initial state based on what's completed
   const getInitialStep = (): FlowStep => {
     if (structuredDone && creativeDone) return 'already-done'
-    return 'mood'
+    return 'emotion-slider'
   }
   
   // Determine initial mode - prefer the one not yet done
@@ -105,17 +105,11 @@ export default function DailyFlow({
       .eq('id', userId)
   }
 
-  // Handle emotion slider continue
+  // Handle emotion slider continue - goes to mood selection
   const handleEmotionContinue = (value: number, label: string) => {
     setEmotionValue(value)
     setEmotionLabel(label)
-    // Set affirmation based on slider value
-    if (value < 20) setCurrentAffirmation("Low energy is not low worth. Small steps still count.")
-    else if (value < 40) setCurrentAffirmation("Even tired, you showed up. That's the win.")
-    else if (value < 60) setCurrentAffirmation("Steady is sustainable. Keep building.")
-    else if (value < 80) setCurrentAffirmation("That good energy? Channel it into your voice.")
-    else setCurrentAffirmation("That fire is fuel. Use it before it fades!")
-    setStep('affirmation')
+    setStep('mood')
   }
 
   // Handle mood selection (legacy, keeping for compatibility)
@@ -265,7 +259,7 @@ export default function DailyFlow({
       <div className="max-w-md mx-auto p-4 pb-24">
         {/* Header */}
         <div className="text-center py-6">
-          {/* Mode Toggle - ALWAYS visible except on completion screens */}
+          {/* Mode Toggle - visible during flow except on completion screens */}
           {step !== 'already-done' && step !== 'complete' && (
             <div className="flex justify-center mb-4">
               <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-slate-200">
@@ -339,8 +333,15 @@ export default function DailyFlow({
         )}
 
         {/* Flow Steps */}
-        {step === 'mood' && (
+        {step === 'emotion-slider' && (
           <EmotionSlider onContinue={handleEmotionContinue} />
+        )}
+
+        {step === 'mood' && (
+          <MoodCheckIn 
+            moods={moods} 
+            onSelect={handleMoodSelect}
+          />
         )}
 
         {step === 'affirmation' && (
