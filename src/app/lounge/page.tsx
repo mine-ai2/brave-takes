@@ -3,6 +3,10 @@ import { redirect } from 'next/navigation'
 import Navigation from '@/components/Navigation'
 import LoungeClient from './LoungeClient'
 
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function LoungePage() {
   const supabase = await createClient()
   

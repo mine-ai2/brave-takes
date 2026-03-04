@@ -4,6 +4,10 @@ import Navigation from '@/components/Navigation'
 import DailyFlow from '@/components/daily/DailyFlow'
 import type { Profile, Track, TrackMission, Platform, PlatformPrompt, CreativePrompt, Mood, DailyCompletion } from '@/lib/types'
 
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export default async function TodayPage() {
   const supabase = await createClient()
   
