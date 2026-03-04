@@ -249,37 +249,43 @@ export default function DailyFlow({
       <div className="max-w-md mx-auto p-4 pb-24">
         {/* Header */}
         <div className="text-center py-6">
-          {/* Mode Toggle - only show when NOT on mood step (MoodCheckIn has its own toggle) */}
-          {step !== 'mood' && step !== 'already-done' && step !== 'complete' && (
+          {/* Mode Toggle - ALWAYS visible except on completion screens */}
+          {step !== 'already-done' && step !== 'complete' && (
             <div className="flex justify-center mb-4">
-              <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-slate-100">
+              <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-slate-200">
                 <button
-                  onClick={() => handleModeToggle('structured')}
+                  onClick={() => {
+                    console.log('Clicking Structured, current mode:', mode, 'structuredDone:', structuredDone)
+                    if (!structuredDone) handleModeToggle('structured')
+                  }}
                   disabled={structuredDone}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
+                  className={`px-5 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-2 ${
                     structuredDone
                       ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed'
                       : mode === 'structured'
-                      ? 'bg-slate-800 text-white'
-                      : 'text-slate-500 hover:text-slate-700'
+                      ? 'bg-slate-800 text-white shadow-md'
+                      : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                   }`}
                 >
-                  {structuredDone && <span>✓</span>}
-                  Structured
+                  {structuredDone ? '✓' : '📋'}
+                  <span>Structured</span>
                 </button>
                 <button
-                  onClick={() => handleModeToggle('creative')}
+                  onClick={() => {
+                    console.log('Clicking Creative, current mode:', mode, 'creativeDone:', creativeDone)
+                    if (!creativeDone) handleModeToggle('creative')
+                  }}
                   disabled={creativeDone}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
+                  className={`px-5 py-2 rounded-full text-sm font-semibold transition-all flex items-center gap-2 ${
                     creativeDone
                       ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed'
                       : mode === 'creative'
-                      ? 'bg-gradient-to-r from-orange-500 to-rose-500 text-white'
-                      : 'text-slate-500 hover:text-slate-700'
+                      ? 'bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-md'
+                      : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                   }`}
                 >
-                  {creativeDone && <span>✓</span>}
-                  Creative
+                  {creativeDone ? '✓' : '🎨'}
+                  <span>Creative</span>
                 </button>
               </div>
             </div>
@@ -321,10 +327,6 @@ export default function DailyFlow({
           <MoodCheckIn 
             moods={moods} 
             onSelect={handleMoodSelect}
-            mode={mode}
-            onModeChange={handleModeToggle}
-            structuredDone={structuredDone}
-            creativeDone={creativeDone}
           />
         )}
 
