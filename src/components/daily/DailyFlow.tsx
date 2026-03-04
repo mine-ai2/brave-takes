@@ -249,39 +249,41 @@ export default function DailyFlow({
       <div className="max-w-md mx-auto p-4 pb-24">
         {/* Header */}
         <div className="text-center py-6">
-          {/* Mode Toggle */}
-          <div className="flex justify-center mb-4">
-            <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-slate-100">
-              <button
-                onClick={() => !structuredDone && handleModeToggle('structured')}
-                disabled={structuredDone}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
-                  structuredDone
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : mode === 'structured'
-                    ? 'bg-slate-800 text-white'
-                    : 'text-slate-500 hover:text-slate-700'
-                }`}
-              >
-                {structuredDone && <span>✓</span>}
-                Structured
-              </button>
-              <button
-                onClick={() => !creativeDone && handleModeToggle('creative')}
-                disabled={creativeDone}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
-                  creativeDone
-                    ? 'bg-emerald-100 text-emerald-700'
-                    : mode === 'creative'
-                    ? 'bg-gradient-to-r from-orange-500 to-rose-500 text-white'
-                    : 'text-slate-500 hover:text-slate-700'
-                }`}
-              >
-                {creativeDone && <span>✓</span>}
-                Creative
-              </button>
+          {/* Mode Toggle - only show when NOT on mood step (MoodCheckIn has its own toggle) */}
+          {step !== 'mood' && step !== 'already-done' && step !== 'complete' && (
+            <div className="flex justify-center mb-4">
+              <div className="inline-flex bg-white rounded-full p-1 shadow-sm border border-slate-100">
+                <button
+                  onClick={() => handleModeToggle('structured')}
+                  disabled={structuredDone}
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
+                    structuredDone
+                      ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed'
+                      : mode === 'structured'
+                      ? 'bg-slate-800 text-white'
+                      : 'text-slate-500 hover:text-slate-700'
+                  }`}
+                >
+                  {structuredDone && <span>✓</span>}
+                  Structured
+                </button>
+                <button
+                  onClick={() => handleModeToggle('creative')}
+                  disabled={creativeDone}
+                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-1.5 ${
+                    creativeDone
+                      ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed'
+                      : mode === 'creative'
+                      ? 'bg-gradient-to-r from-orange-500 to-rose-500 text-white'
+                      : 'text-slate-500 hover:text-slate-700'
+                  }`}
+                >
+                  {creativeDone && <span>✓</span>}
+                  Creative
+                </button>
+              </div>
             </div>
-          </div>
+          )}
 
           <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 mb-4">
             <span className="text-lg">{track?.icon || '🦁'}</span>
