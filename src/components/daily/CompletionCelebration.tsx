@@ -9,6 +9,7 @@ interface Props {
   longestStreak: number
   isCreativeMode?: boolean
   otherModeAvailable?: boolean
+  isBonusRound?: boolean  // True when completing the second mode
   onStartOtherMode?: () => void
 }
 
@@ -18,6 +19,7 @@ export default function CompletionCelebration({
   longestStreak, 
   isCreativeMode = false,
   otherModeAvailable = false,
+  isBonusRound = false,
   onStartOtherMode,
 }: Props) {
   const [confetti, setConfetti] = useState(false)
@@ -29,6 +31,10 @@ export default function CompletionCelebration({
   }, [])
 
   const getStreakMessage = () => {
+    // Bonus round message
+    if (isBonusRound) {
+      return "DOUBLE DAY! You crushed both modes! 🔥🔥"
+    }
     if (isCreativeMode) {
       if (streak >= 21) return "21 days of creative exploration! You're an artist. 🎨"
       if (streak >= 14) return "Two weeks of creative practice! Your voice is evolving."
@@ -46,7 +52,11 @@ export default function CompletionCelebration({
   }
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100 relative overflow-hidden">
+    <div className={`rounded-3xl shadow-xl p-8 border relative overflow-hidden ${
+      isBonusRound 
+        ? 'bg-gradient-to-br from-amber-50 to-orange-100 border-amber-200' 
+        : 'bg-white border-slate-100'
+    }`}>
       {/* Confetti Animation */}
       {confetti && (
         <div className="absolute inset-0 pointer-events-none">
@@ -68,13 +78,26 @@ export default function CompletionCelebration({
 
       <div className="text-center relative z-10">
         {/* Trophy */}
-        <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-amber-200 animate-bounce-slow">
-          <span className="text-5xl">🦁</span>
+        <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg animate-bounce-slow ${
+          isBonusRound 
+            ? 'bg-gradient-to-br from-yellow-400 to-amber-500 shadow-yellow-200' 
+            : 'bg-gradient-to-br from-amber-400 to-orange-500 shadow-amber-200'
+        }`}>
+          <span className="text-5xl">{isBonusRound ? '⭐' : '🦁'}</span>
         </div>
+
+        {/* Bonus Badge */}
+        {isBonusRound && (
+          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-amber-500 text-white px-4 py-2 rounded-full mb-4 shadow-lg">
+            <span className="text-lg">🏆</span>
+            <span className="font-bold">BONUS COMPLETE!</span>
+            <span className="text-lg">🏆</span>
+          </div>
+        )}
 
         {/* Main Message */}
         <h2 className="text-3xl font-bold text-slate-800 mb-2">
-          You did it!
+          {isBonusRound ? 'Double Day Champion!' : 'You did it!'}
         </h2>
         <p className="text-lg text-slate-600 mb-8">
           {getStreakMessage()}

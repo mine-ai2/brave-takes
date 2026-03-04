@@ -74,6 +74,12 @@ export default function DailyFlow({
   const [selectedCreativePrompt, setSelectedCreativePrompt] = useState<CreativePrompt | null>(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  
+  // Track which modes have been completed (includes initial state + this session)
+  const [completedModes, setCompletedModes] = useState<{ structured: boolean; creative: boolean }>({
+    structured: structuredDone,
+    creative: creativeDone,
+  })
 
   // Get prompts for a specific platform
   const getPromptsForPlatform = (platformId: string) => {
@@ -226,6 +232,11 @@ export default function DailyFlow({
           onConflict: 'user_id',
         })
 
+      // Mark this mode as completed in state
+      setCompletedModes(prev => ({
+        ...prev,
+        [mode]: true,
+      }))
       setStep('complete')
       router.refresh()
     } catch (err) {
@@ -430,13 +441,16 @@ export default function DailyFlow({
             dayNumber={profile.current_day}
             longestStreak={Math.max(longestStreak, currentStreak + 1)}
             isCreativeMode={mode === 'creative'}
-            otherModeAvailable={mode === 'creative' ? !structuredDone : !creativeDone}
+            otherModeAvailable={mode === 'creative' ? !completedModes.structured : !completedModes.creative}
+            isBonusRound={completedModes.structured && completedModes.creative}
             onStartOtherMode={() => {
               // Switch to the other mode and restart flow
               const newMode = mode === 'creative' ? 'structured' : 'creative'
               setMode(newMode)
-              setStep('mood')
+              setStep('emotion-slider')
               setSelectedMood(null)
+              setEmotionValue(50)
+              setEmotionLabel('')
               setCurrentAffirmation('')
               setSelectedPlatform(null)
               setSelectedPlatformPrompt(null)
