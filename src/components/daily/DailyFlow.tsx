@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import type { Profile, Track, TrackMission, Platform, PlatformPrompt, CreativePrompt, Mood, DailyCompletion } from '@/lib/types'
 import MoodCheckIn from './MoodCheckIn'
+import EmotionSlider from './EmotionSlider'
 import AffirmationDisplay from './AffirmationDisplay'
 import MissionCard from './MissionCard'
 import PlatformSelector from './PlatformSelector'
@@ -65,6 +66,8 @@ export default function DailyFlow({
   const [step, setStep] = useState<FlowStep>(getInitialStep())
   const [mode, setMode] = useState<Mode>(getInitialMode())
   const [selectedMood, setSelectedMood] = useState<Mood | null>(null)
+  const [emotionValue, setEmotionValue] = useState<number>(50)
+  const [emotionLabel, setEmotionLabel] = useState<string>('')
   const [currentAffirmation, setCurrentAffirmation] = useState<string>('')
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null)
   const [selectedPlatformPrompt, setSelectedPlatformPrompt] = useState<PlatformPrompt | null>(null)
@@ -102,7 +105,20 @@ export default function DailyFlow({
       .eq('id', userId)
   }
 
-  // Handle mood selection
+  // Handle emotion slider continue
+  const handleEmotionContinue = (value: number, label: string) => {
+    setEmotionValue(value)
+    setEmotionLabel(label)
+    // Set affirmation based on slider value
+    if (value < 20) setCurrentAffirmation("Low energy is not low worth. Small steps still count.")
+    else if (value < 40) setCurrentAffirmation("Even tired, you showed up. That's the win.")
+    else if (value < 60) setCurrentAffirmation("Steady is sustainable. Keep building.")
+    else if (value < 80) setCurrentAffirmation("That good energy? Channel it into your voice.")
+    else setCurrentAffirmation("That fire is fuel. Use it before it fades!")
+    setStep('affirmation')
+  }
+
+  // Handle mood selection (legacy, keeping for compatibility)
   const handleMoodSelect = (mood: Mood) => {
     setSelectedMood(mood)
     setCurrentAffirmation(mood.affirmation)
@@ -324,15 +340,13 @@ export default function DailyFlow({
 
         {/* Flow Steps */}
         {step === 'mood' && (
-          <MoodCheckIn 
-            moods={moods} 
-            onSelect={handleMoodSelect}
-          />
+          <EmotionSlider onContinue={handleEmotionContinue} />
         )}
 
         {step === 'affirmation' && (
           <AffirmationDisplay
-            mood={selectedMood!}
+            mood={selectedMood}
+            emotionLabel={emotionLabel}
             affirmation={currentAffirmation}
             onContinue={handleAffirmationContinue}
           />

@@ -4,12 +4,13 @@ import { useState, useEffect } from 'react'
 import type { Mood } from '@/lib/types'
 
 interface Props {
-  mood: Mood
+  mood?: Mood | null
+  emotionLabel?: string
   affirmation: string
   onContinue: () => void
 }
 
-export default function AffirmationDisplay({ mood, affirmation, onContinue }: Props) {
+export default function AffirmationDisplay({ mood, emotionLabel, affirmation, onContinue }: Props) {
   const [visible, setVisible] = useState(false)
 
   useEffect(() => {
@@ -17,13 +18,30 @@ export default function AffirmationDisplay({ mood, affirmation, onContinue }: Pr
     setTimeout(() => setVisible(true), 100)
   }, [])
 
+  // Get display emoji based on emotion label
+  const getEmoji = () => {
+    if (mood) return mood.emoji
+    if (!emotionLabel) return '✨'
+    if (emotionLabel.includes('Low')) return '😔'
+    if (emotionLabel.includes('Tired')) return '😐'
+    if (emotionLabel.includes('Steady')) return '🙂'
+    if (emotionLabel.includes('Good')) return '😊'
+    return '🔥'
+  }
+
+  const getDisplayLabel = () => {
+    if (mood) return `Feeling ${mood.name.toLowerCase()}`
+    if (emotionLabel) return emotionLabel
+    return 'Checking in'
+  }
+
   return (
     <div className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100">
       <div className={`text-center transition-all duration-700 ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
         {/* Mood Badge */}
         <div className="inline-flex items-center gap-2 bg-slate-100 px-4 py-2 rounded-full mb-8">
-          <span className="text-xl">{mood.emoji}</span>
-          <span className="text-slate-600 font-medium">Feeling {mood.name.toLowerCase()}</span>
+          <span className="text-xl">{getEmoji()}</span>
+          <span className="text-slate-600 font-medium">{getDisplayLabel()}</span>
         </div>
 
         {/* Affirmation */}
