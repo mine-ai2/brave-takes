@@ -29,9 +29,9 @@ export async function GET(request: Request) {
           .eq('id', user.id)
           .single()
         
-        // If no profile or onboarding not complete, redirect to onboarding
+        // If no profile or onboarding not complete, redirect to welcome flow
         if (!profile || !profile.onboarding_complete || !profile.selected_track) {
-          return NextResponse.redirect(`${baseUrl}/onboarding`)
+          return NextResponse.redirect(`${baseUrl}/welcome`)
         }
       }
       

@@ -3,7 +3,17 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import Image from 'next/image'
 import type { Track, Platform } from '@/lib/types'
+
+const BRAND_COLORS = {
+  deepPurple: '#5B21B6',
+  magenta: '#A855F7',
+  teal: '#14B8A6',
+  gold: '#D4A574',
+  navy: '#1E3A5F',
+  lavender: '#E9D5FF',
+}
 
 export default function OnboardingPage() {
   const router = useRouter()
@@ -91,21 +101,28 @@ export default function OnboardingPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="animate-pulse text-slate-400">Loading...</div>
+      <div className="min-h-screen bg-gradient-to-b from-white via-purple-50/30 to-purple-100/40 flex items-center justify-center">
+        <div className="animate-pulse" style={{ color: BRAND_COLORS.magenta }}>Loading...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-white via-purple-50/30 to-purple-100/40 flex items-center justify-center p-4">
       <div className="w-full max-w-lg">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-rose-500 to-orange-500 rounded-2xl mb-4 shadow-lg">
-            <span className="text-3xl">🦁</span>
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl mb-4 shadow-lg overflow-hidden"
+               style={{ background: `linear-gradient(135deg, ${BRAND_COLORS.lavender}, white)` }}>
+            <Image
+              src="/branding/microphone-icon.png"
+              alt="Brave Takes"
+              width={48}
+              height={48}
+              className="w-12 h-12 object-contain"
+            />
           </div>
-          <h1 className="text-2xl font-bold text-slate-800 mb-2">
+          <h1 className="text-2xl font-bold mb-2" style={{ color: BRAND_COLORS.deepPurple }}>
             {step === 1 ? 'Choose Your Track' : 'Select Your Platforms'}
           </h1>
           <p className="text-slate-600">
@@ -120,9 +137,12 @@ export default function OnboardingPage() {
           {[1, 2].map((i) => (
             <div
               key={i}
-              className={`h-1.5 w-16 rounded-full transition-colors ${
-                i <= step ? 'bg-gradient-to-r from-rose-500 to-orange-500' : 'bg-slate-200'
-              }`}
+              className="h-1.5 w-16 rounded-full transition-colors"
+              style={{ 
+                background: i <= step 
+                  ? `linear-gradient(to right, ${BRAND_COLORS.deepPurple}, ${BRAND_COLORS.magenta})`
+                  : '#e2e8f0'
+              }}
             />
           ))}
         </div>
@@ -156,7 +176,10 @@ export default function OnboardingPage() {
                         </p>
                       </div>
                       {isSelected && (
-                        <div className="w-6 h-6 bg-gradient-to-r from-rose-500 to-orange-500 rounded-full flex items-center justify-center">
+                        <div 
+                          className="w-6 h-6 rounded-full flex items-center justify-center"
+                          style={{ background: `linear-gradient(to right, ${BRAND_COLORS.deepPurple}, ${BRAND_COLORS.magenta})` }}
+                        >
                           <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
@@ -170,7 +193,8 @@ export default function OnboardingPage() {
               <button
                 onClick={() => selectedTrack && setStep(2)}
                 disabled={!selectedTrack}
-                className="w-full mt-6 py-3.5 px-4 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-rose-200"
+                className="w-full mt-6 py-3.5 px-4 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                style={{ background: `linear-gradient(to right, ${BRAND_COLORS.deepPurple}, ${BRAND_COLORS.magenta})` }}
               >
                 Continue →
               </button>
@@ -205,7 +229,10 @@ export default function OnboardingPage() {
                           {platform.name}
                         </span>
                         {isSelected && (
-                          <div className="mt-2 w-5 h-5 mx-auto bg-gradient-to-r from-rose-500 to-orange-500 rounded-full flex items-center justify-center">
+                          <div 
+                            className="mt-2 w-5 h-5 mx-auto rounded-full flex items-center justify-center"
+                            style={{ background: `linear-gradient(to right, ${BRAND_COLORS.deepPurple}, ${BRAND_COLORS.magenta})` }}
+                          >
                             <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                             </svg>
@@ -220,16 +247,18 @@ export default function OnboardingPage() {
               <div className="flex gap-3 mt-6">
                 <button
                   onClick={() => setStep(1)}
-                  className="flex-1 py-3 px-4 border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium rounded-xl transition-all"
+                  className="flex-1 py-3 px-4 border-2 font-medium rounded-xl transition-all hover:bg-purple-50"
+                  style={{ borderColor: BRAND_COLORS.deepPurple, color: BRAND_COLORS.deepPurple }}
                 >
                   ← Back
                 </button>
                 <button
                   onClick={handleComplete}
                   disabled={selectedPlatforms.length === 0 || saving}
-                  className="flex-1 py-3.5 px-4 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-rose-200"
+                  className="flex-1 py-3.5 px-4 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                  style={{ background: `linear-gradient(to right, ${BRAND_COLORS.deepPurple}, ${BRAND_COLORS.magenta})` }}
                 >
-                  {saving ? 'Saving...' : 'Start My Journey 🦁'}
+                  {saving ? 'Saving...' : 'Start My Journey ✨'}
                 </button>
               </div>
             </div>
@@ -237,7 +266,7 @@ export default function OnboardingPage() {
         </div>
         
         {/* Footer */}
-        <p className="text-center text-slate-400 text-sm mt-6">
+        <p className="text-center text-sm mt-6" style={{ color: BRAND_COLORS.gold }}>
           21 days to build your brave content habit
         </p>
       </div>
