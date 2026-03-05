@@ -182,7 +182,7 @@ export default function VaultClient({ initialItems, userId }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-b from-white via-purple-50/30 to-purple-100/40">
       <div className="max-w-md mx-auto p-4 pb-24">
         {/* Header */}
         <div className="text-center py-6">
@@ -202,7 +202,7 @@ export default function VaultClient({ initialItems, userId }: Props) {
               }}
               className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
                 activeCategory === cat.id
-                  ? 'bg-gradient-to-r from-rose-500 to-orange-500 text-white shadow-lg shadow-rose-200'
+                  ? 'bg-gradient-to-r from-[#5B21B6] to-[#A855F7] text-white shadow-lg shadow-purple-200'
                   : 'bg-white text-slate-600 border border-slate-200 hover:border-slate-300'
               }`}
             >
@@ -259,7 +259,7 @@ export default function VaultClient({ initialItems, userId }: Props) {
               <button
                 onClick={handleAdd}
                 disabled={!newContent.trim() || saving}
-                className="flex-1 py-2.5 px-4 bg-gradient-to-r from-rose-500 to-orange-500 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 py-2.5 px-4 bg-gradient-to-r from-[#5B21B6] to-[#A855F7] text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {saving ? 'Saving...' : 'Save'}
               </button>

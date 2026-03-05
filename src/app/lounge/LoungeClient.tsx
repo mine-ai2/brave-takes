@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { BRAND } from '@/lib/brand'
 import type { LoungePost } from '@/lib/types'
 
 type PostType = 'general' | 'win' | 'question' | 'support'
@@ -128,7 +129,7 @@ export default function LoungeClient({ initialPosts, userId, userDisplayName, us
     : posts.filter(p => p.post_type === filter)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-b from-white via-purple-50/30 to-purple-100/40">
       <div className="max-w-md mx-auto p-4 pb-24">
         {/* Header */}
         <div className="text-center py-6">
@@ -159,7 +160,7 @@ export default function LoungeClient({ initialPosts, userId, userDisplayName, us
                   onClick={() => setPostType(type.id)}
                   className={`flex-1 py-2 px-3 rounded-xl text-sm font-medium transition-all ${
                     postType === type.id
-                      ? 'bg-gradient-to-r from-rose-500 to-orange-500 text-white'
+                      ? ' text-white'
                       : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                   }`}
                 >
@@ -178,7 +179,7 @@ export default function LoungeClient({ initialPosts, userId, userDisplayName, us
                 postType === 'support' ? "What support or encouragement can you offer?" :
                 "What's on your mind?"
               }
-              className="w-full p-3 border border-slate-200 rounded-xl resize-none focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all text-slate-700"
+              className="w-full p-3 border border-slate-200 rounded-xl resize-none focus:border-purple-400 focus:ring-2 focus:ring-purple-100 outline-none transition-all text-slate-700"
               rows={4}
               autoFocus
             />
@@ -197,7 +198,8 @@ export default function LoungeClient({ initialPosts, userId, userDisplayName, us
               <button
                 onClick={handleSubmitPost}
                 disabled={!newPost.trim() || posting}
-                className="flex-1 py-2.5 px-4 bg-gradient-to-r from-rose-500 to-orange-500 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 py-2.5 px-4 text-white font-semibold rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{ background: BRAND.gradients.button }}
               >
                 {posting ? 'Posting...' : 'Post'}
               </button>
@@ -236,7 +238,7 @@ export default function LoungeClient({ initialPosts, userId, userDisplayName, us
         <div className="space-y-4">
           {filteredPosts.length === 0 ? (
             <div className="bg-white rounded-2xl shadow-lg p-8 text-center border border-slate-100">
-              <div className="text-4xl mb-3">🦁</div>
+              <div className="text-4xl mb-3">🎙️</div>
               <h3 className="text-lg font-semibold text-slate-800 mb-1">
                 No posts yet
               </h3>
@@ -278,8 +280,8 @@ export default function LoungeClient({ initialPosts, userId, userDisplayName, us
                     onClick={() => handleLike(post.id, post.user_has_liked || false)}
                     className={`flex items-center gap-1.5 text-sm font-medium transition-all ${
                       post.user_has_liked
-                        ? 'text-rose-500'
-                        : 'text-slate-400 hover:text-rose-500'
+                        ? 'text-[#5B21B6]'
+                        : 'text-slate-400 hover:text-[#5B21B6]'
                     }`}
                   >
                     <span>{post.user_has_liked ? '❤️' : '🤍'}</span>

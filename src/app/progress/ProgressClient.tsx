@@ -1,5 +1,6 @@
 'use client'
 
+import { BRAND } from '@/lib/brand'
 import type { Profile, Track, DailyCompletion, Mood } from '@/lib/types'
 
 interface Props {
@@ -55,16 +56,16 @@ export default function ProgressClient({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-b from-white via-purple-50/30 to-purple-100/40">
       <div className="max-w-md mx-auto p-4 pb-24">
         {/* Header */}
         <div className="text-center py-6">
-          <h1 className="text-2xl font-bold text-slate-800 mb-1">Your Progress</h1>
+          <h1 className="text-2xl font-bold mb-1" style={{ color: BRAND.colors.deepPurple }}>Your Progress</h1>
           <p className="text-slate-500">Keep showing up, brave creator</p>
         </div>
 
         {/* Streak Card */}
-        <div className="bg-gradient-to-br from-orange-500 to-rose-500 rounded-3xl p-6 mb-6 text-white shadow-xl shadow-orange-200">
+        <div className="rounded-3xl p-6 mb-6 text-white shadow-xl" style={{ background: BRAND.gradients.primary }}>
           <div className="flex justify-between items-center">
             <div>
               <p className="text-orange-100 text-sm mb-1">Current Streak</p>
@@ -104,10 +105,10 @@ export default function ProgressClient({
                 <p className="text-sm text-slate-500">Day {profile.current_day} of 21</p>
               </div>
             </div>
-            <div className="h-3 bg-slate-100 rounded-full overflow-hidden">
+            <div className="h-3 bg-purple-100 rounded-full overflow-hidden">
               <div 
-                className="h-full bg-gradient-to-r from-rose-500 to-orange-500 rounded-full transition-all"
-                style={{ width: `${((profile.current_day - 1) / 21) * 100}%` }}
+                className="h-full rounded-full transition-all"
+                style={{ width: `${((profile.current_day - 1) / 21) * 100}%`, background: BRAND.gradients.button }}
               />
             </div>
             <div className="flex justify-between text-xs text-slate-400 mt-2">
@@ -172,7 +173,7 @@ export default function ProgressClient({
         <div className="mt-6 text-center">
           <p className="text-slate-500 text-sm">
             {currentStreak === 0 
-              ? "Every journey starts with day one. You've got this! 🦁"
+              ? "Every journey starts with day one. You've got this! 🎙️"
               : currentStreak < 7
               ? "You're building momentum. Keep going! 💪"
               : currentStreak < 14

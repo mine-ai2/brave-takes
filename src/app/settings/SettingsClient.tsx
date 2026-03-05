@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { BRAND } from '@/lib/brand'
 import type { Profile, Track, Platform } from '@/lib/types'
 
 interface Props {
@@ -75,11 +76,11 @@ export default function SettingsClient({ profile, tracks, platforms, userEmail }
   const currentTrack = tracks.find(t => t.id === selectedTrack)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-b from-white via-purple-50/30 to-purple-100/40">
       <div className="max-w-md mx-auto p-4 pb-24">
         {/* Header */}
         <div className="text-center py-6">
-          <h1 className="text-2xl font-bold text-slate-800 mb-1">Settings</h1>
+          <h1 className="text-2xl font-bold mb-1" style={{ color: BRAND.colors.deepPurple }}>Settings</h1>
           <p className="text-slate-500">Customize your experience</p>
         </div>
 
@@ -98,7 +99,7 @@ export default function SettingsClient({ profile, tracks, platforms, userEmail }
                   setSaved(false)
                 }}
                 placeholder="Enter your name"
-                className="w-full p-3 border border-slate-200 rounded-xl focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all text-slate-800"
+                className="w-full p-3 border border-slate-200 rounded-xl focus:border-purple-400 focus:ring-2 focus:ring-purple-100 outline-none transition-all text-slate-800"
               />
               <p className="text-xs text-slate-400 mt-1">This is how you&apos;ll appear in The Lounge</p>
             </div>
@@ -131,9 +132,10 @@ export default function SettingsClient({ profile, tracks, platforms, userEmail }
                 }}
                 className={`w-full p-4 rounded-xl border-2 text-left transition-all ${
                   selectedTrack === track.id
-                    ? 'border-rose-500 bg-rose-50'
+                    ? 'bg-purple-50'
                     : 'border-slate-200 hover:border-slate-300'
                 }`}
+                style={selectedTrack === track.id ? { borderColor: BRAND.colors.deepPurple } : {}}
               >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{track.icon}</span>
@@ -158,9 +160,10 @@ export default function SettingsClient({ profile, tracks, platforms, userEmail }
                 onClick={() => handlePlatformToggle(platform.id)}
                 className={`p-3 rounded-xl border-2 transition-all ${
                   selectedPlatforms.includes(platform.id)
-                    ? 'border-rose-500 bg-rose-50'
+                    ? 'bg-purple-50'
                     : 'border-slate-200 hover:border-slate-300'
                 }`}
+                style={selectedPlatforms.includes(platform.id) ? { borderColor: BRAND.colors.deepPurple } : {}}
               >
                 <span className="text-xl block mb-1">{platform.icon}</span>
                 <span className="text-xs text-slate-600">{platform.name}</span>
@@ -179,11 +182,8 @@ export default function SettingsClient({ profile, tracks, platforms, userEmail }
         <button
           onClick={handleSave}
           disabled={saving || selectedPlatforms.length === 0}
-          className={`w-full py-3.5 px-4 font-semibold rounded-xl transition-all mb-6 ${
-            saved
-              ? 'bg-emerald-500 text-white'
-              : 'bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white shadow-lg shadow-rose-200'
-          } disabled:opacity-50 disabled:cursor-not-allowed`}
+          className={`w-full py-3.5 px-4 font-semibold rounded-xl transition-all mb-6 text-white shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed`}
+          style={{ background: saved ? '#10b981' : BRAND.gradients.button }}
         >
           {saving ? 'Saving...' : saved ? '✓ Saved!' : 'Save Changes'}
         </button>
@@ -212,7 +212,7 @@ export default function SettingsClient({ profile, tracks, platforms, userEmail }
         {/* App Info */}
         <div className="mt-6 text-center text-slate-400 text-sm">
           <p>Brave Takes v2.0</p>
-          <p className="mt-1">Made with 🦁 for brave creators</p>
+          <p className="mt-1">Made with 🎙️ for brave creators</p>
         </div>
       </div>
     </div>

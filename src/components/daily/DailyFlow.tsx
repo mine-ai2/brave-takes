@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
+import { BRAND } from '@/lib/brand'
 import type { Profile, Track, TrackMission, Platform, PlatformPrompt, CreativePrompt, Mood, DailyCompletion } from '@/lib/types'
 import MoodCheckIn from './MoodCheckIn'
 import EmotionSlider from './EmotionSlider'
@@ -275,8 +277,8 @@ export default function DailyFlow({
 
   // Background class based on mode
   const bgClass = mode === 'creative' 
-    ? 'min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-rose-50'
-    : 'min-h-screen bg-gradient-to-b from-slate-50 to-slate-100'
+    ? 'min-h-screen bg-gradient-to-b from-amber-50 via-orange-50 to-purple-50'
+    : 'min-h-screen bg-gradient-to-b from-white via-purple-50/30 to-purple-100/40'
 
   return (
     <div className={bgClass}>
@@ -314,9 +316,10 @@ export default function DailyFlow({
                     creativeDone
                       ? 'bg-emerald-100 text-emerald-700 cursor-not-allowed'
                       : mode === 'creative'
-                      ? 'bg-gradient-to-r from-orange-500 to-rose-500 text-white shadow-md'
+                      ? 'text-white shadow-md'
                       : 'text-slate-500 hover:text-slate-700 hover:bg-slate-50'
                   }`}
+                  style={mode === 'creative' && !creativeDone ? { background: BRAND.gradients.button } : {}}
                 >
                   {creativeDone ? '✓' : '🎨'}
                   <span>Creative</span>
@@ -325,11 +328,11 @@ export default function DailyFlow({
             </div>
           )}
 
-          <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-slate-100 mb-4">
-            <span className="text-lg">{track?.icon || '🦁'}</span>
+          <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm border border-purple-100 mb-4">
+            <span className="text-lg">{track?.icon || '🎙️'}</span>
             <span className="font-medium text-slate-700">Day {profile.current_day}</span>
             {currentStreak > 0 && (
-              <span className="text-orange-500 flex items-center gap-1">
+              <span className="flex items-center gap-1" style={{ color: BRAND.colors.gold }}>
                 <span>🔥</span>
                 <span>{currentStreak}</span>
               </span>
@@ -442,7 +445,8 @@ export default function DailyFlow({
             <button
               onClick={handleComplete}
               disabled={saving}
-              className="w-full py-4 px-6 bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white font-semibold rounded-xl transition-all"
+              className="w-full py-4 px-6 text-white font-semibold rounded-xl transition-all hover:shadow-lg"
+              style={{ background: BRAND.gradients.button }}
             >
               {saving ? 'Saving...' : '✅ Complete anyway'}
             </button>
@@ -527,14 +531,14 @@ export default function DailyFlow({
               </a>
             </div>
 
-            <div className="bg-slate-50 rounded-xl p-4 mb-4">
+            <div className="bg-purple-50 rounded-xl p-4 mb-4">
               <div className="flex justify-center gap-8">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-500">{currentStreak}</div>
+                  <div className="text-3xl font-bold" style={{ color: BRAND.colors.gold }}>{currentStreak}</div>
                   <div className="text-sm text-slate-500">Day Streak</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-500">{longestStreak}</div>
+                  <div className="text-3xl font-bold" style={{ color: BRAND.colors.deepPurple }}>{longestStreak}</div>
                   <div className="text-sm text-slate-500">Longest</div>
                 </div>
               </div>

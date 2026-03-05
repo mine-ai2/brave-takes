@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { BRAND } from '@/lib/brand'
 
 interface Props {
   onContinue: (value: number, label: string) => void
@@ -26,25 +27,11 @@ export default function EmotionSlider({ onContinue }: Props) {
     if (val < 80) return 'Feeling Good'
     return 'On Fire!'
   }
-  
-  // Get affirmation based on value
-  const getAffirmation = (val: number) => {
-    if (val < 20) return "Low energy is not low worth. Small steps still count."
-    if (val < 40) return "Even tired, you showed up. That's the win."
-    if (val < 60) return "Steady is sustainable. Keep building."
-    if (val < 80) return "That good energy? Channel it into your voice."
-    return "That fire is fuel. Use it before it fades!"
-  }
-  
-  // Get gradient color based on value
-  const getGradientPosition = () => {
-    return `${value}%`
-  }
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl p-6 border border-slate-100">
+    <div className="bg-white rounded-3xl shadow-xl p-6 border border-purple-100">
       <div className="text-center mb-8">
-        <h2 className="text-2xl font-bold text-slate-800 mb-2">
+        <h2 className="text-2xl font-bold mb-2" style={{ color: BRAND.colors.deepPurple }}>
           How are you feeling?
         </h2>
         <p className="text-slate-500 text-sm">
@@ -65,7 +52,8 @@ export default function EmotionSlider({ onContinue }: Props) {
       {/* Slider Container */}
       <div className="px-4 mb-8">
         {/* Slider Track Background */}
-        <div className="relative h-3 rounded-full bg-gradient-to-r from-slate-200 via-amber-200 to-orange-400 mb-4">
+        <div className="relative h-3 rounded-full mb-4"
+             style={{ background: `linear-gradient(to right, ${BRAND.colors.lavender}, ${BRAND.colors.magenta}, ${BRAND.colors.gold})` }}>
           {/* Custom Slider */}
           <input
             type="range"
@@ -77,8 +65,13 @@ export default function EmotionSlider({ onContinue }: Props) {
           />
           {/* Slider Thumb Visual */}
           <div 
-            className="absolute top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg border-4 border-rose-400 transition-all duration-150 pointer-events-none"
-            style={{ left: `calc(${value}% - 16px)` }}
+            className="absolute top-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-lg transition-all duration-150 pointer-events-none"
+            style={{ 
+              left: `calc(${value}% - 16px)`,
+              borderWidth: '4px',
+              borderStyle: 'solid',
+              borderColor: BRAND.colors.deepPurple,
+            }}
           />
         </div>
         
@@ -92,7 +85,8 @@ export default function EmotionSlider({ onContinue }: Props) {
       {/* Continue Button */}
       <button
         onClick={() => onContinue(value, getLabel(value))}
-        className="w-full py-4 px-6 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-rose-200"
+        className="w-full py-4 px-6 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl"
+        style={{ background: BRAND.gradients.button }}
       >
         Continue →
       </button>

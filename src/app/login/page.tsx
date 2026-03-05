@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import Image from 'next/image'
+import { BRAND } from '@/lib/brand'
 
 type AuthMode = 'login' | 'signup' | 'forgot' | 'magic'
 
@@ -113,29 +115,45 @@ export default function LoginPage() {
     setMessage(null)
   }
 
+  const inputStyles = `w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 outline-none transition-all text-slate-800 placeholder-slate-400`
+  
+  const buttonStyles = {
+    background: BRAND.gradients.button,
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-b from-white via-purple-50/30 to-purple-100/40 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo/Header */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-rose-500 to-orange-500 rounded-2xl mb-4 shadow-lg">
-            <span className="text-3xl">🦁</span>
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-4 shadow-lg overflow-hidden"
+               style={{ background: `linear-gradient(135deg, ${BRAND.colors.lavender}, white)` }}>
+            <Image
+              src="/branding/microphone-icon.png"
+              alt="Brave Takes"
+              width={56}
+              height={56}
+              className="w-14 h-14 object-contain"
+            />
           </div>
-          <h1 className="text-3xl font-bold text-slate-800 mb-2">Brave Takes</h1>
-          <p className="text-slate-600">Daily confidence reps for creators</p>
+          <h1 className="text-3xl font-bold mb-2" style={{ color: BRAND.colors.deepPurple }}>
+            Brave Takes
+          </h1>
+          <p className="text-slate-600">Confidence training for creative visibility</p>
         </div>
         
-        <div className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100">
+        <div className="bg-white rounded-3xl shadow-xl p-8 border border-purple-100">
           {/* Mode Tabs */}
           {mode !== 'forgot' && mode !== 'magic' && (
-            <div className="flex bg-slate-100 rounded-xl p-1 mb-6">
+            <div className="flex bg-purple-50 rounded-xl p-1 mb-6">
               <button
                 onClick={() => { setMode('login'); resetForm(); }}
                 className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all ${
                   mode === 'login'
-                    ? 'bg-white text-slate-800 shadow-sm'
+                    ? 'bg-white shadow-sm'
                     : 'text-slate-500 hover:text-slate-700'
                 }`}
+                style={{ color: mode === 'login' ? BRAND.colors.deepPurple : undefined }}
               >
                 Sign In
               </button>
@@ -143,9 +161,10 @@ export default function LoginPage() {
                 onClick={() => { setMode('signup'); resetForm(); }}
                 className={`flex-1 py-2.5 px-4 rounded-lg text-sm font-medium transition-all ${
                   mode === 'signup'
-                    ? 'bg-white text-slate-800 shadow-sm'
+                    ? 'bg-white shadow-sm'
                     : 'text-slate-500 hover:text-slate-700'
                 }`}
+                style={{ color: mode === 'signup' ? BRAND.colors.deepPurple : undefined }}
               >
                 Sign Up
               </button>
@@ -166,7 +185,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all text-slate-800 placeholder-slate-400"
+                  className={inputStyles}
                 />
               </div>
               
@@ -181,7 +200,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all text-slate-800 placeholder-slate-400"
+                  className={inputStyles}
                 />
               </div>
 
@@ -189,7 +208,8 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => { setMode('forgot'); resetForm(); }}
-                  className="text-sm text-rose-600 hover:text-rose-700"
+                  className="text-sm hover:underline"
+                  style={{ color: BRAND.colors.magenta }}
                 >
                   Forgot password?
                 </button>
@@ -198,7 +218,8 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 px-4 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-rose-200"
+                className="w-full py-3.5 px-4 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                style={buttonStyles}
               >
                 {loading ? 'Signing in...' : 'Sign In'}
               </button>
@@ -219,7 +240,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all text-slate-800 placeholder-slate-400"
+                  className={inputStyles}
                 />
               </div>
               
@@ -234,7 +255,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="At least 6 characters"
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all text-slate-800 placeholder-slate-400"
+                  className={inputStyles}
                 />
               </div>
 
@@ -249,14 +270,15 @@ export default function LoginPage() {
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all text-slate-800 placeholder-slate-400"
+                  className={inputStyles}
                 />
               </div>
               
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 px-4 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-rose-200"
+                className="w-full py-3.5 px-4 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                style={buttonStyles}
               >
                 {loading ? 'Creating account...' : 'Create Account'}
               </button>
@@ -267,7 +289,9 @@ export default function LoginPage() {
           {mode === 'forgot' && (
             <form onSubmit={handleForgotPassword} className="space-y-4">
               <div className="text-center mb-4">
-                <h2 className="text-xl font-semibold text-slate-800 mb-2">Reset Password</h2>
+                <h2 className="text-xl font-semibold mb-2" style={{ color: BRAND.colors.deepPurple }}>
+                  Reset Password
+                </h2>
                 <p className="text-slate-600 text-sm">Enter your email to receive a reset link</p>
               </div>
               
@@ -282,14 +306,15 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all text-slate-800 placeholder-slate-400"
+                  className={inputStyles}
                 />
               </div>
               
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 px-4 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-rose-200"
+                className="w-full py-3.5 px-4 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                style={buttonStyles}
               >
                 {loading ? 'Sending...' : 'Send Reset Link'}
               </button>
@@ -308,7 +333,9 @@ export default function LoginPage() {
           {mode === 'magic' && (
             <form onSubmit={handleMagicLink} className="space-y-4">
               <div className="text-center mb-4">
-                <h2 className="text-xl font-semibold text-slate-800 mb-2">Magic Link</h2>
+                <h2 className="text-xl font-semibold mb-2" style={{ color: BRAND.colors.deepPurple }}>
+                  Magic Link
+                </h2>
                 <p className="text-slate-600 text-sm">Sign in without a password</p>
               </div>
               
@@ -323,14 +350,15 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
                   required
-                  className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all text-slate-800 placeholder-slate-400"
+                  className={inputStyles}
                 />
               </div>
               
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 px-4 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-rose-200"
+                className="w-full py-3.5 px-4 text-white font-semibold rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl"
+                style={buttonStyles}
               >
                 {loading ? 'Sending...' : 'Send Magic Link'}
               </button>
@@ -358,10 +386,11 @@ export default function LoginPage() {
           
           {/* Magic Link Alternative */}
           {(mode === 'login' || mode === 'signup') && (
-            <div className="mt-6 pt-6 border-t border-slate-100">
+            <div className="mt-6 pt-6 border-t border-purple-100">
               <button
                 onClick={() => { setMode('magic'); resetForm(); }}
-                className="w-full py-3 px-4 border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium rounded-xl transition-all text-sm"
+                className="w-full py-3 px-4 border-2 font-medium rounded-xl transition-all text-sm hover:bg-purple-50"
+                style={{ borderColor: BRAND.colors.deepPurple, color: BRAND.colors.deepPurple }}
               >
                 ✨ Sign in with Magic Link instead
               </button>
@@ -370,8 +399,8 @@ export default function LoginPage() {
         </div>
         
         {/* Footer */}
-        <p className="text-center text-slate-500 text-sm mt-6">
-          Your journey to brave content starts here.
+        <p className="text-center text-sm mt-6" style={{ color: BRAND.colors.gold }}>
+          Train • Show Up • Shine
         </p>
       </div>
     </div>

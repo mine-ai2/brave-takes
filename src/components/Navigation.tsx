@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { BRAND } from '@/lib/brand'
 
 interface Props {
   current: 'today' | 'vault' | 'lounge' | 'progress' | 'settings'
@@ -16,22 +17,21 @@ const navItems = [
 
 export default function Navigation({ current }: Props) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 shadow-lg">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-purple-100 shadow-lg">
       <div className="max-w-md mx-auto flex justify-around py-2">
         {navItems.map((item) => (
           <Link
             key={item.id}
             href={item.href}
-            className={`flex flex-col items-center py-2 px-4 rounded-xl transition-all ${
-              current === item.id
-                ? 'text-rose-600'
-                : 'text-slate-400 hover:text-slate-600'
-            }`}
+            className="flex flex-col items-center py-2 px-4 rounded-xl transition-all"
+            style={{ 
+              color: current === item.id ? BRAND.colors.deepPurple : '#94a3b8'
+            }}
           >
             <span className={`text-xl ${current === item.id ? 'scale-110' : ''} transition-transform`}>
               {item.icon}
             </span>
-            <span className={`text-xs mt-1 font-medium ${current === item.id ? 'text-rose-600' : ''}`}>
+            <span className="text-xs mt-1 font-medium">
               {item.label}
             </span>
           </Link>

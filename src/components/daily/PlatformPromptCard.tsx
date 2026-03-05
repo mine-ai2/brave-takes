@@ -1,6 +1,7 @@
 'use client'
 
 import type { PlatformPrompt, Platform } from '@/lib/types'
+import { BRAND } from '@/lib/brand'
 
 interface Props {
   prompt: PlatformPrompt
@@ -13,18 +14,18 @@ interface Props {
 export default function PlatformPromptCard({ prompt, platform, onComplete, onShuffle, saving }: Props) {
   const getPlatformGradient = (color: string) => {
     const gradients: Record<string, string> = {
-      pink: 'from-pink-500 to-rose-500',
-      blue: 'from-blue-500 to-indigo-500',
-      red: 'from-red-500 to-orange-500',
-      gray: 'from-slate-600 to-slate-700',
-      teal: 'from-teal-500 to-cyan-500',
+      pink: 'from-pink-500 to-purple-500',
+      blue: 'from-blue-500 to-purple-500',
+      red: 'from-red-500 to-purple-500',
+      gray: 'from-slate-600 to-purple-500',
+      teal: 'from-teal-500 to-purple-500',
       indigo: 'from-indigo-500 to-purple-500',
     }
     return gradients[color] || gradients.pink
   }
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl p-8 border border-slate-100">
+    <div className="bg-white rounded-3xl shadow-xl p-8 border border-purple-100">
       {/* Platform Header */}
       <div className={`bg-gradient-to-r ${getPlatformGradient(platform.color)} rounded-2xl p-4 mb-6 text-white text-center`}>
         <span className="text-3xl block mb-2">{platform.icon}</span>
@@ -32,12 +33,12 @@ export default function PlatformPromptCard({ prompt, platform, onComplete, onShu
       </div>
 
       {/* Prompt Title */}
-      <h2 className="text-xl font-bold text-slate-800 mb-4 text-center">
+      <h2 className="text-xl font-bold mb-4 text-center" style={{ color: BRAND.colors.deepPurple }}>
         {prompt.title}
       </h2>
 
       {/* Prompt Text */}
-      <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 mb-4">
+      <div className="bg-gradient-to-br from-purple-50 to-purple-100/50 rounded-2xl p-6 mb-4">
         <p className="text-slate-700 leading-relaxed">
           {prompt.prompt_text}
         </p>
@@ -55,7 +56,7 @@ export default function PlatformPromptCard({ prompt, platform, onComplete, onShu
       {/* Example */}
       {prompt.example && (
         <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 mb-8">
-          <p className="text-sm text-amber-600 font-medium mb-1">💡 Tip</p>
+          <p className="text-sm font-medium mb-1" style={{ color: BRAND.colors.gold }}>💡 Tip</p>
           <p className="text-amber-800 text-sm">{prompt.example}</p>
         </div>
       )}
@@ -71,7 +72,8 @@ export default function PlatformPromptCard({ prompt, platform, onComplete, onShu
       <button
         onClick={onComplete}
         disabled={saving}
-        className="w-full py-4 px-6 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-emerald-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-4 px-6 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+        style={{ background: BRAND.gradients.button }}
       >
         {saving ? (
           <span className="flex items-center justify-center gap-2">
@@ -89,7 +91,8 @@ export default function PlatformPromptCard({ prompt, platform, onComplete, onShu
       <button
         onClick={onComplete}
         disabled={saving}
-        className="w-full mt-3 py-3 px-4 border border-slate-200 text-slate-500 hover:bg-slate-50 font-medium rounded-xl transition-all disabled:opacity-50"
+        className="w-full mt-3 py-3 px-4 border-2 font-medium rounded-xl transition-all disabled:opacity-50 hover:bg-purple-50"
+        style={{ borderColor: BRAND.colors.deepPurple, color: BRAND.colors.deepPurple }}
       >
         Skip for today
       </button>

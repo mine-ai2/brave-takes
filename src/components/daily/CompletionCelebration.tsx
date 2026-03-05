@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { BRAND } from '@/lib/brand'
 
 interface Props {
   streak: number
@@ -54,8 +55,8 @@ export default function CompletionCelebration({
   return (
     <div className={`rounded-3xl shadow-xl p-8 border relative overflow-hidden ${
       isBonusRound 
-        ? 'bg-gradient-to-br from-amber-50 to-orange-100 border-amber-200' 
-        : 'bg-white border-slate-100'
+        ? 'bg-gradient-to-br from-amber-50 to-purple-100 border-amber-200' 
+        : 'bg-white border-purple-100'
     }`}>
       {/* Confetti Animation */}
       {confetti && (
@@ -70,7 +71,7 @@ export default function CompletionCelebration({
                 animationDuration: `${1 + Math.random()}s`,
               }}
             >
-              {['🎉', '⭐', '🔥', '💪', '🦁'][Math.floor(Math.random() * 5)]}
+              {['🎉', '⭐', '🔥', '💪', '🎙️'][Math.floor(Math.random() * 5)]}
             </div>
           ))}
         </div>
@@ -78,17 +79,23 @@ export default function CompletionCelebration({
 
       <div className="text-center relative z-10">
         {/* Trophy */}
-        <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg animate-bounce-slow ${
-          isBonusRound 
-            ? 'bg-gradient-to-br from-yellow-400 to-amber-500 shadow-yellow-200' 
-            : 'bg-gradient-to-br from-amber-400 to-orange-500 shadow-amber-200'
-        }`}>
-          <span className="text-5xl">{isBonusRound ? '⭐' : '🦁'}</span>
+        <div 
+          className="w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg animate-bounce-slow"
+          style={{ 
+            background: isBonusRound 
+              ? 'linear-gradient(135deg, #D4A574, #A855F7)' 
+              : BRAND.gradients.primary 
+          }}
+        >
+          <span className="text-5xl">{isBonusRound ? '⭐' : '🎙️'}</span>
         </div>
 
         {/* Bonus Badge */}
         {isBonusRound && (
-          <div className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-amber-500 text-white px-4 py-2 rounded-full mb-4 shadow-lg">
+          <div 
+            className="inline-flex items-center gap-2 text-white px-4 py-2 rounded-full mb-4 shadow-lg"
+            style={{ background: BRAND.gradients.button }}
+          >
             <span className="text-lg">🏆</span>
             <span className="font-bold">BONUS COMPLETE!</span>
             <span className="text-lg">🏆</span>
@@ -104,16 +111,22 @@ export default function CompletionCelebration({
         </p>
 
         {/* Stats */}
-        <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 mb-8">
+        <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 mb-8">
           <div className="flex justify-center gap-12">
             <div className="text-center">
-              <div className="text-4xl font-bold bg-gradient-to-r from-orange-500 to-rose-500 bg-clip-text text-transparent">
+              <div 
+                className="text-4xl font-bold"
+                style={{ color: BRAND.colors.gold }}
+              >
                 {streak}
               </div>
               <div className="text-sm text-slate-500 mt-1">Day Streak</div>
             </div>
             <div className="text-center">
-              <div className="text-4xl font-bold bg-gradient-to-r from-purple-500 to-indigo-500 bg-clip-text text-transparent">
+              <div 
+                className="text-4xl font-bold"
+                style={{ color: BRAND.colors.deepPurple }}
+              >
                 {longestStreak}
               </div>
               <div className="text-sm text-slate-500 mt-1">Best Streak</div>
@@ -122,8 +135,8 @@ export default function CompletionCelebration({
         </div>
 
         {/* Next Day Preview */}
-        <div className="bg-rose-50 border border-rose-100 rounded-xl p-4 mb-6">
-          <p className="text-rose-700 text-sm">
+        <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-6">
+          <p style={{ color: BRAND.colors.deepPurple }} className="text-sm">
             <span className="font-semibold">Tomorrow:</span> Day {dayNumber >= 21 ? 1 : dayNumber + 1} mission unlocked
           </p>
         </div>
@@ -133,24 +146,23 @@ export default function CompletionCelebration({
           {otherModeAvailable && onStartOtherMode && (
             <button
               onClick={onStartOtherMode}
-              className={`w-full py-4 px-6 font-semibold rounded-xl transition-all shadow-lg ${
-                isCreativeMode
-                  ? 'bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 text-white shadow-slate-200'
-                  : 'bg-gradient-to-r from-orange-500 to-rose-500 hover:from-orange-600 hover:to-rose-600 text-white shadow-orange-200'
-              }`}
+              className="w-full py-4 px-6 font-semibold rounded-xl transition-all shadow-lg text-white hover:shadow-xl"
+              style={{ background: BRAND.gradients.button }}
             >
               {isCreativeMode ? '📋 Try Structured Mode Too' : '🎨 Try Creative Mode Too'}
             </button>
           )}
           <Link
             href="/lounge"
-            className="block w-full py-4 px-6 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-rose-200"
+            className="block w-full py-4 px-6 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl"
+            style={{ background: BRAND.gradients.button }}
           >
             Share in The Lounge 🎤
           </Link>
           <Link
             href="/progress"
-            className="block w-full py-3 px-4 border border-slate-200 text-slate-600 hover:bg-slate-50 font-medium rounded-xl transition-all"
+            className="block w-full py-3 px-4 border-2 font-medium rounded-xl transition-all hover:bg-purple-50 text-center"
+            style={{ borderColor: BRAND.colors.deepPurple, color: BRAND.colors.deepPurple }}
           >
             View My Progress
           </Link>
