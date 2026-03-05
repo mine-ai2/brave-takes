@@ -2,10 +2,13 @@ import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url)
+  const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
   const type = searchParams.get('type')
   const next = searchParams.get('next') ?? '/today'
+  
+  // Use production URL - don't rely on request.url origin behind proxies
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://app.bravetakes.com'
 
   if (code) {
     const supabase = await createClient()
@@ -14,7 +17,7 @@ export async function GET(request: Request) {
     if (!error) {
       // Handle password recovery
       if (type === 'recovery') {
-        return NextResponse.redirect(`${origin}/reset-password`)
+        return NextResponse.redirect(`${baseUrl}/reset-password`)
       }
 
       // Check if user has completed onboarding
@@ -28,14 +31,14 @@ export async function GET(request: Request) {
         
         // If no profile or onboarding not complete, redirect to onboarding
         if (!profile || !profile.onboarding_complete || !profile.selected_track) {
-          return NextResponse.redirect(`${origin}/onboarding`)
+          return NextResponse.redirect(`${baseUrl}/onboarding`)
         }
       }
       
-      return NextResponse.redirect(`${origin}${next}`)
+      return NextResponse.redirect(`${baseUrl}${next}`)
     }
   }
 
   // Return to login on error
-  return NextResponse.redirect(`${origin}/login?error=auth`)
+  return NextResponse.redirect(`${baseUrl}/login?error=auth`)
 }
