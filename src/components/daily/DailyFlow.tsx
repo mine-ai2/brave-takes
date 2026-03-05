@@ -15,7 +15,7 @@ import PlatformPromptCard from './PlatformPromptCard'
 import CreativePromptCard from './CreativePromptCard'
 import CompletionCelebration from './CompletionCelebration'
 
-type FlowStep = 'emotion-slider' | 'mood' | 'affirmation' | 'mission' | 'platform-select' | 'prompt' | 'complete' | 'already-done'
+type FlowStep = 'welcome' | 'emotion-slider' | 'mood' | 'affirmation' | 'mission' | 'platform-select' | 'prompt' | 'complete' | 'already-done'
 type Mode = 'structured' | 'creative'
 
 interface Props {
@@ -55,7 +55,7 @@ export default function DailyFlow({
   // Determine initial state based on what's completed
   const getInitialStep = (): FlowStep => {
     if (structuredDone && creativeDone) return 'already-done'
-    return 'emotion-slider'
+    return 'welcome'  // Always start with welcome screen
   }
   
   // Determine initial mode - prefer the one not yet done
@@ -283,7 +283,8 @@ export default function DailyFlow({
   return (
     <div className={bgClass}>
       <div className="max-w-md mx-auto p-4 pb-24">
-        {/* Header */}
+        {/* Header - hidden on welcome screen */}
+        {step !== 'welcome' && (
         <div className="text-center py-6">
           {/* Mode Toggle - visible during flow except on completion screens */}
           {step !== 'already-done' && step !== 'complete' && (
@@ -345,6 +346,7 @@ export default function DailyFlow({
             <p className="text-slate-500 text-sm mt-1">Explore. Experiment. Play.</p>
           )}
         </div>
+        )}
 
         {/* Error Display */}
         {error && (
@@ -360,6 +362,68 @@ export default function DailyFlow({
         )}
 
         {/* Flow Steps */}
+        
+        {/* Welcome Screen */}
+        {step === 'welcome' && (
+          <div className="flex flex-col items-center justify-center min-h-[70vh] text-center">
+            {/* Logo */}
+            <div className="mb-8 animate-fade-in">
+              <Image
+                src="/branding/logo-main.png"
+                alt="Brave Takes"
+                width={280}
+                height={160}
+                className="w-72 h-auto"
+                priority
+              />
+            </div>
+
+            {/* Tagline */}
+            <h1 
+              className="text-2xl font-light tracking-wider mb-2"
+              style={{ color: BRAND.colors.gold }}
+            >
+              Train • Show Up • Shine
+            </h1>
+            
+            <p className="text-slate-600 text-center max-w-xs mb-4">
+              Your daily confidence ritual for creative visibility
+            </p>
+
+            {/* Day & Streak Badge */}
+            <div className="inline-flex items-center gap-3 bg-white px-5 py-3 rounded-full shadow-sm border border-purple-100 mb-8">
+              <span className="text-lg">{track?.icon || '🎙️'}</span>
+              <span className="font-medium text-slate-700">Day {profile.current_day}</span>
+              {currentStreak > 0 && (
+                <span className="flex items-center gap-1" style={{ color: BRAND.colors.gold }}>
+                  <span>🔥</span>
+                  <span>{currentStreak} day streak</span>
+                </span>
+              )}
+            </div>
+
+            {/* Start Button */}
+            <button
+              onClick={() => setStep('emotion-slider')}
+              className="px-12 py-4 rounded-full text-white font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+              style={{ background: BRAND.gradients.button }}
+            >
+              Let&apos;s Go ✨
+            </button>
+
+            {/* Footer */}
+            <div className="mt-auto pt-12">
+              <Image
+                src="/branding/created-by-footer.png"
+                alt="Created by Carrie Farris"
+                width={200}
+                height={40}
+                className="w-48 h-auto opacity-60"
+              />
+            </div>
+          </div>
+        )}
+
         {step === 'emotion-slider' && (
           <EmotionSlider onContinue={handleEmotionContinue} />
         )}
