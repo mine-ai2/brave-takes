@@ -365,55 +365,61 @@ export default function DailyFlow({
         
         {/* Welcome Screen */}
         {step === 'welcome' && (
-          <div className="flex flex-col items-center justify-center min-h-[80vh] text-center -mt-6">
-            {/* Logo Header with tagline */}
-            <div className="mb-6 animate-fade-in">
+          <div className="flex flex-col items-center min-h-[90vh] text-center pt-4">
+            {/* Logo - Big at top */}
+            <div className="mb-2 animate-fade-in">
               <Image
-                src="/branding/logo-header.png"
-                alt="Brave Takes - Confidence Training for Creative Visibility"
+                src="/branding/logo-main.png"
+                alt="Brave Takes"
                 width={400}
-                height={300}
-                className="w-full max-w-sm h-auto"
+                height={250}
+                className="w-full max-w-md h-auto"
                 priority
               />
             </div>
 
-            {/* Train Show Up Shine Banner */}
-            <div className="mb-8 w-full max-w-md">
+            {/* Train Show Up Shine Banner - Full width */}
+            <div className="w-full mb-auto">
               <Image
                 src="/branding/tagline-banner.png"
                 alt="Train • Show Up • Shine"
-                width={500}
-                height={100}
+                width={600}
+                height={120}
                 className="w-full h-auto"
               />
             </div>
 
-            {/* Day & Streak Badge */}
-            <div className="inline-flex items-center gap-3 bg-white px-5 py-3 rounded-full shadow-sm border border-purple-100 mb-8">
-              <span className="text-lg">{track?.icon || '🎙️'}</span>
-              <span className="font-medium text-slate-700">Day {profile.current_day}</span>
-              {currentStreak > 0 && (
-                <span className="flex items-center gap-1" style={{ color: BRAND.colors.gold }}>
-                  <span>🔥</span>
-                  <span>{currentStreak} day streak</span>
-                </span>
-              )}
-            </div>
-
-            {/* Let's Go Button */}
+            {/* Let's Go Button - Centered */}
             <button
               onClick={() => setStep('emotion-slider')}
-              className="hover:scale-105 transition-transform active:scale-95"
+              className="hover:scale-105 transition-transform active:scale-95 mb-auto"
             >
               <Image
                 src="/branding/lets-go-button.png"
                 alt="Let's Go!"
-                width={280}
-                height={80}
-                className="w-56 h-auto"
+                width={320}
+                height={90}
+                className="w-72 h-auto"
               />
             </button>
+
+            {/* Footer */}
+            <div className="mt-auto pb-6 text-center">
+              <p 
+                className="text-sm tracking-widest mb-2 uppercase"
+                style={{ color: BRAND.colors.deepPurple }}
+              >
+                Confidence Training for{' '}
+                <span style={{ color: BRAND.colors.teal }}>Creative Visibility</span>
+              </p>
+              <Image
+                src="/branding/created-by-footer.png"
+                alt="Created by Carrie Farris"
+                width={300}
+                height={50}
+                className="w-64 h-auto mx-auto"
+              />
+            </div>
           </div>
         )}
 
