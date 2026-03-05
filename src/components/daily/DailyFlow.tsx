@@ -365,30 +365,29 @@ export default function DailyFlow({
         
         {/* Welcome Screen */}
         {step === 'welcome' && (
-          <div className="flex flex-col items-center justify-center min-h-[70vh] text-center">
-            {/* Logo */}
-            <div className="mb-8 animate-fade-in">
+          <div className="flex flex-col items-center justify-center min-h-[80vh] text-center -mt-6">
+            {/* Logo Header with tagline */}
+            <div className="mb-6 animate-fade-in">
               <Image
-                src="/branding/logo-main.png"
-                alt="Brave Takes"
-                width={280}
-                height={160}
-                className="w-72 h-auto"
+                src="/branding/logo-header.png"
+                alt="Brave Takes - Confidence Training for Creative Visibility"
+                width={400}
+                height={300}
+                className="w-full max-w-sm h-auto"
                 priority
               />
             </div>
 
-            {/* Tagline */}
-            <h1 
-              className="text-2xl font-light tracking-wider mb-2"
-              style={{ color: BRAND.colors.gold }}
-            >
-              Train • Show Up • Shine
-            </h1>
-            
-            <p className="text-slate-600 text-center max-w-xs mb-4">
-              Your daily confidence ritual for creative visibility
-            </p>
+            {/* Train Show Up Shine Banner */}
+            <div className="mb-8 w-full max-w-md">
+              <Image
+                src="/branding/tagline-banner.png"
+                alt="Train • Show Up • Shine"
+                width={500}
+                height={100}
+                className="w-full h-auto"
+              />
+            </div>
 
             {/* Day & Streak Badge */}
             <div className="inline-flex items-center gap-3 bg-white px-5 py-3 rounded-full shadow-sm border border-purple-100 mb-8">
@@ -402,25 +401,19 @@ export default function DailyFlow({
               )}
             </div>
 
-            {/* Start Button */}
+            {/* Let's Go Button */}
             <button
               onClick={() => setStep('emotion-slider')}
-              className="px-12 py-4 rounded-full text-white font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
-              style={{ background: BRAND.gradients.button }}
+              className="hover:scale-105 transition-transform active:scale-95"
             >
-              Let&apos;s Go ✨
-            </button>
-
-            {/* Footer */}
-            <div className="mt-auto pt-12">
               <Image
-                src="/branding/created-by-footer.png"
-                alt="Created by Carrie Farris"
-                width={200}
-                height={40}
-                className="w-48 h-auto opacity-60"
+                src="/branding/lets-go-button.png"
+                alt="Let's Go!"
+                width={280}
+                height={80}
+                className="w-56 h-auto"
               />
-            </div>
+            </button>
           </div>
         )}
 
