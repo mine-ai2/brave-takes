@@ -85,32 +85,42 @@ export default function WelcomePage() {
 
       {/* Welcome Screen (Slide 0 is special) */}
       {currentSlide === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
+        <div className="flex-1 flex flex-col items-center justify-center px-6 relative z-10">
           {/* Logo */}
-          <div className="mb-8 animate-fade-in">
+          <div className="animate-fade-in" style={{ marginTop: '60px', marginBottom: '20px', width: '220px' }}>
             <Image
               src="/branding/logo-main.png"
               alt="Brave Takes"
-              width={280}
-              height={100}
-              className="w-72 h-auto"
+              width={220}
+              height={80}
+              className="w-full h-auto"
               priority
             />
           </div>
 
           {/* Tagline */}
-          <h1 
-            className="text-2xl font-light tracking-wider mb-2"
+          <p 
+            className="text-lg font-light tracking-wider mb-2"
             style={{ color: BRAND_COLORS.gold }}
           >
             Train • Show Up • Shine
-          </h1>
+          </p>
           
-          <p className="text-slate-700 text-center max-w-xs mb-12">
+          {/* Subtitle */}
+          <p className="text-slate-600 text-center text-sm max-w-xs mb-8">
             Your daily confidence ritual for creative visibility
           </p>
 
-          {/* Start Button with gold glow */}
+          {/* Main Headline - LARGEST */}
+          <h1 
+            className="text-4xl font-bold text-center leading-tight mb-5"
+            style={{ color: '#4A1D8C' }}
+          >
+            Show Up.<br />
+            Speak Up. Shine.
+          </h1>
+
+          {/* Start Button with gold glow - 20px below headline */}
           <button
             onClick={handleNext}
             className="px-12 py-4 rounded-full text-white font-semibold text-lg transform hover:scale-105 transition-all"
@@ -119,18 +129,8 @@ export default function WelcomePage() {
               boxShadow: '0 0 30px rgba(212, 165, 116, 0.4), 0 4px 20px rgba(91, 33, 182, 0.3)'
             }}
           >
-            Get Started
+            Start My Brave Take
           </button>
-
-          {/* Created by text - simple text instead of image */}
-          <div className="mt-auto pt-12">
-            <p 
-              className="text-sm italic opacity-60"
-              style={{ color: BRAND_COLORS.gold }}
-            >
-              Created by Carrie Farris
-            </p>
-          </div>
         </div>
       ) : (
         /* Intro Slides */
