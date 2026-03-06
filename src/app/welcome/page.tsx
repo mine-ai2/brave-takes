@@ -49,12 +49,12 @@ export default function WelcomePage() {
       <div className="flex-1 flex flex-col items-center justify-center px-6 relative z-10">
         
         {/* Logo */}
-        <div className="mb-4" style={{ width: '260px', marginTop: '60px' }}>
+        <div className="mb-4" style={{ width: '320px', marginTop: '60px' }}>
           <Image
             src="/branding/logo-main.png"
             alt="Brave Takes"
-            width={260}
-            height={93}
+            width={320}
+            height={124}
             className="w-full h-auto"
             priority
           />
