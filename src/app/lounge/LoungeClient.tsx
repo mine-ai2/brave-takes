@@ -136,7 +136,7 @@ export default function LoungeClient({ initialPosts, userId, userDisplayName, us
           <h1 className="text-2xl font-bold text-slate-800 mb-1">The Lounge</h1>
           <p className="text-slate-500">Where brave creators hang out</p>
           {userStreak > 0 && (
-            <div className="inline-flex items-center gap-1 bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm mt-3">
+            <div className="inline-flex items-center gap-1 bg-purple-100 px-3 py-1 rounded-full text-sm mt-3" style={{ color: BRAND.colors.deepPurple }}>
               🔥 {userStreak} day streak
             </div>
           )}
@@ -252,7 +252,10 @@ export default function LoungeClient({ initialPosts, userId, userDisplayName, us
                 {/* Post Header */}
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-gradient-to-br from-rose-400 to-orange-400 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                    <div 
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold"
+                      style={{ background: BRAND.gradients.primary }}
+                    >
                       {post.user_display_name?.charAt(0) || 'B'}
                     </div>
                     <div>
