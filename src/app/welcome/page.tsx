@@ -8,7 +8,7 @@ const BRAND_COLORS = {
   deepPurple: '#5B21B6',
   magenta: '#A855F7',
   teal: '#14B8A6',
-  gold: '#D4A574',
+  gold: '#d4af37',
   navy: '#1E3A5F',
   lavender: '#E9D5FF',
 }
@@ -77,40 +77,44 @@ export default function WelcomePage() {
         }}
       />
 
+      {/* Soft glow behind button area */}
+      <div 
+        className="absolute pointer-events-none"
+        style={{
+          top: '55%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          width: '400px',
+          height: '200px',
+          background: 'radial-gradient(circle, rgba(155,108,255,0.3) 0%, rgba(123,63,228,0.15) 40%, transparent 70%)',
+          filter: 'blur(40px)',
+        }}
+      />
+
       {/* Welcome Screen (Slide 0 is special) */}
       {currentSlide === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center px-6 relative z-10">
+        <div 
+          className="flex-1 flex flex-col items-center justify-center relative z-10"
+          style={{ paddingLeft: '24px', paddingRight: '24px', textAlign: 'center' }}
+        >
           {/* Logo */}
-          <div className="animate-fade-in" style={{ marginTop: '60px', marginBottom: '20px', width: '220px' }}>
+          <div 
+            className="animate-fade-in" 
+            style={{ width: '240px', marginTop: '100px', marginBottom: '20px' }}
+          >
             <Image
               src="/branding/logo-main.png"
               alt="Brave Takes"
-              width={220}
-              height={80}
+              width={240}
+              height={86}
               className="w-full h-auto"
               priority
             />
           </div>
 
-          {/* Tagline */}
-          <p 
-            className="text-lg font-light tracking-wider mb-2"
-            style={{ color: BRAND_COLORS.gold }}
-          >
-            Train • Show Up • Shine
-          </p>
-          
-          {/* Subtitle */}
-          <p 
-            className="text-center text-sm max-w-xs mb-8"
-            style={{ color: '#5a4a7a' }}
-          >
-            Your daily confidence ritual for creative visibility
-          </p>
-
-          {/* Main Headline - LARGEST */}
+          {/* Headline - LARGEST */}
           <h1 
-            className="text-4xl font-bold text-center leading-tight mb-5"
+            className="text-4xl font-bold leading-tight mb-6"
             style={{ color: '#3d1c6b' }}
           >
             Train. Show Up. Shine.
@@ -119,7 +123,7 @@ export default function WelcomePage() {
           {/* Start Button */}
           <button
             onClick={handleNext}
-            className="px-12 py-4 rounded-full text-white font-semibold text-lg transform hover:scale-105 transition-all"
+            className="px-12 py-4 rounded-full text-white font-semibold text-lg transform hover:scale-105 transition-all mb-8"
             style={{ 
               background: 'linear-gradient(135deg, #5a2ca0 0%, #7b3fe4 50%, #9b59ff 100%)',
               boxShadow: '0 10px 25px rgba(91,46,255,0.35)'
@@ -127,6 +131,22 @@ export default function WelcomePage() {
           >
             Start My Brave Take
           </button>
+
+          {/* Tagline */}
+          <p 
+            className="text-lg font-light tracking-wider mb-2"
+            style={{ color: '#d4af37' }}
+          >
+            Train • Show Up • Shine
+          </p>
+          
+          {/* Subtext */}
+          <p 
+            className="text-sm max-w-xs"
+            style={{ color: '#5a4a7a' }}
+          >
+            Your daily confidence ritual for creative visibility
+          </p>
         </div>
       ) : (
         /* Intro Slides */
