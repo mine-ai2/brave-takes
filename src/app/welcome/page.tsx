@@ -63,23 +63,17 @@ export default function WelcomePage() {
         background: 'radial-gradient(circle at 50% 15%, #f6f2ff 0%, #e6d8ff 20%, #caa9ff 40%, #9b6cff 65%, #6b3ccf 85%, #4a1d8c 100%)'
       }}
     >
-      {/* Sparkle overlay - positioned at bottom */}
+      {/* Bottom glow effect */}
       <div 
-        className="absolute inset-0 pointer-events-none"
+        className="absolute pointer-events-none"
         style={{
-          background: `
-            radial-gradient(circle at 15% 85%, rgba(255,255,255,0.5) 0%, transparent 8%),
-            radial-gradient(circle at 85% 80%, rgba(255,255,255,0.4) 0%, transparent 6%),
-            radial-gradient(circle at 25% 75%, rgba(255,255,255,0.35) 0%, transparent 5%),
-            radial-gradient(circle at 75% 90%, rgba(255,255,255,0.45) 0%, transparent 7%),
-            radial-gradient(circle at 50% 85%, rgba(255,255,255,0.3) 0%, transparent 10%),
-            radial-gradient(circle at 35% 95%, rgba(255,255,255,0.4) 0%, transparent 6%),
-            radial-gradient(circle at 65% 75%, rgba(255,255,255,0.35) 0%, transparent 5%),
-            radial-gradient(circle at 45% 90%, rgba(255,255,255,0.3) 0%, transparent 8%),
-            radial-gradient(circle at 90% 95%, rgba(255,255,255,0.25) 0%, transparent 4%),
-            radial-gradient(circle at 10% 90%, rgba(255,255,255,0.3) 0%, transparent 5%)
-          `,
-          opacity: 0.25
+          bottom: '-100px',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '600px',
+          height: '400px',
+          background: 'radial-gradient(circle, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.12) 30%, rgba(155,108,255,0.25) 55%, transparent 75%)',
+          filter: 'blur(60px)',
         }}
       />
 
@@ -107,25 +101,28 @@ export default function WelcomePage() {
           </p>
           
           {/* Subtitle */}
-          <p className="text-slate-600 text-center text-sm max-w-xs mb-8">
+          <p 
+            className="text-center text-sm max-w-xs mb-8"
+            style={{ color: '#5a4a7a' }}
+          >
             Your daily confidence ritual for creative visibility
           </p>
 
           {/* Main Headline - LARGEST */}
           <h1 
             className="text-4xl font-bold text-center leading-tight mb-5"
-            style={{ color: '#4A1D8C' }}
+            style={{ color: '#3d1c6b' }}
           >
             Train. Show Up. Shine.
           </h1>
 
-          {/* Start Button with gold glow - 20px below headline */}
+          {/* Start Button */}
           <button
             onClick={handleNext}
             className="px-12 py-4 rounded-full text-white font-semibold text-lg transform hover:scale-105 transition-all"
             style={{ 
-              background: `linear-gradient(135deg, ${BRAND_COLORS.deepPurple}, ${BRAND_COLORS.magenta})`,
-              boxShadow: '0 0 30px rgba(212, 165, 116, 0.4), 0 4px 20px rgba(91, 33, 182, 0.3)'
+              background: 'linear-gradient(135deg, #5a2ca0 0%, #7b3fe4 50%, #9b59ff 100%)',
+              boxShadow: '0 10px 25px rgba(91,46,255,0.35)'
             }}
           >
             Start My Brave Take
@@ -194,8 +191,8 @@ export default function WelcomePage() {
               onClick={handleNext}
               className="flex-1 py-3 px-6 rounded-full text-white font-semibold transition-all"
               style={{ 
-                background: `linear-gradient(135deg, ${BRAND_COLORS.magenta}, ${BRAND_COLORS.deepPurple})`,
-                boxShadow: '0 0 25px rgba(212, 165, 116, 0.35), 0 4px 15px rgba(0, 0, 0, 0.2)'
+                background: 'linear-gradient(135deg, #5a2ca0 0%, #7b3fe4 50%, #9b59ff 100%)',
+                boxShadow: '0 10px 25px rgba(91,46,255,0.35)'
               }}
             >
               {isLastSlide ? "Let's Go!" : "Next"}
