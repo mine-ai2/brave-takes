@@ -60,7 +60,7 @@ export default function WelcomePage() {
     <div 
       className="min-h-screen flex flex-col relative overflow-hidden"
       style={{
-        background: 'radial-gradient(ellipse 150% 100% at 50% 0%, #F5F0FF 0%, #E9D5FF 20%, #C4B5FD 40%, #A78BFA 60%, #7C3AED 80%, #5B21B6 100%)'
+        background: 'radial-gradient(circle at 50% 15%, #f6f2ff 0%, #e6d8ff 20%, #caa9ff 40%, #9b6cff 65%, #6b3ccf 85%, #4a1d8c 100%)'
       }}
     >
       {/* Sparkle overlay - positioned at bottom */}
