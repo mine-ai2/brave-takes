@@ -57,18 +57,43 @@ export default function WelcomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-purple-50/30 to-purple-100/40 flex flex-col">
+    <div 
+      className="min-h-screen flex flex-col relative overflow-hidden"
+      style={{
+        background: 'radial-gradient(ellipse 150% 100% at 50% 0%, #F5F0FF 0%, #E9D5FF 20%, #C4B5FD 40%, #A78BFA 60%, #7C3AED 80%, #5B21B6 100%)'
+      }}
+    >
+      {/* Sparkle overlay - positioned at bottom */}
+      <div 
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(circle at 15% 85%, rgba(255,255,255,0.5) 0%, transparent 8%),
+            radial-gradient(circle at 85% 80%, rgba(255,255,255,0.4) 0%, transparent 6%),
+            radial-gradient(circle at 25% 75%, rgba(255,255,255,0.35) 0%, transparent 5%),
+            radial-gradient(circle at 75% 90%, rgba(255,255,255,0.45) 0%, transparent 7%),
+            radial-gradient(circle at 50% 85%, rgba(255,255,255,0.3) 0%, transparent 10%),
+            radial-gradient(circle at 35% 95%, rgba(255,255,255,0.4) 0%, transparent 6%),
+            radial-gradient(circle at 65% 75%, rgba(255,255,255,0.35) 0%, transparent 5%),
+            radial-gradient(circle at 45% 90%, rgba(255,255,255,0.3) 0%, transparent 8%),
+            radial-gradient(circle at 90% 95%, rgba(255,255,255,0.25) 0%, transparent 4%),
+            radial-gradient(circle at 10% 90%, rgba(255,255,255,0.3) 0%, transparent 5%)
+          `,
+          opacity: 0.25
+        }}
+      />
+
       {/* Welcome Screen (Slide 0 is special) */}
       {currentSlide === 0 ? (
-        <div className="flex-1 flex flex-col items-center justify-center p-6">
+        <div className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
           {/* Logo */}
           <div className="mb-8 animate-fade-in">
             <Image
               src="/branding/logo-main.png"
               alt="Brave Takes"
-              width={320}
-              height={180}
-              className="w-80 h-auto"
+              width={280}
+              height={100}
+              className="w-72 h-auto"
               priority
             />
           </div>
@@ -81,40 +106,40 @@ export default function WelcomePage() {
             Train • Show Up • Shine
           </h1>
           
-          <p className="text-slate-600 text-center max-w-xs mb-12">
+          <p className="text-slate-700 text-center max-w-xs mb-12">
             Your daily confidence ritual for creative visibility
           </p>
 
-          {/* Start Button */}
+          {/* Start Button with gold glow */}
           <button
             onClick={handleNext}
-            className="px-12 py-4 rounded-full text-white font-semibold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all"
+            className="px-12 py-4 rounded-full text-white font-semibold text-lg transform hover:scale-105 transition-all"
             style={{ 
-              background: `linear-gradient(135deg, ${BRAND_COLORS.deepPurple}, ${BRAND_COLORS.magenta})` 
+              background: `linear-gradient(135deg, ${BRAND_COLORS.deepPurple}, ${BRAND_COLORS.magenta})`,
+              boxShadow: '0 0 30px rgba(212, 165, 116, 0.4), 0 4px 20px rgba(91, 33, 182, 0.3)'
             }}
           >
             Get Started
           </button>
 
-          {/* Footer */}
-          <div className="mt-auto pt-8">
-            <Image
-              src="/branding/created-by-footer.png"
-              alt="Created by Carrie Farris"
-              width={300}
-              height={60}
-              className="w-64 h-auto opacity-70"
-            />
+          {/* Created by text - simple text instead of image */}
+          <div className="mt-auto pt-12">
+            <p 
+              className="text-sm italic opacity-60"
+              style={{ color: BRAND_COLORS.gold }}
+            >
+              Created by Carrie Farris
+            </p>
           </div>
         </div>
       ) : (
         /* Intro Slides */
-        <div className="flex-1 flex flex-col items-center justify-center p-6">
+        <div className="flex-1 flex flex-col items-center justify-center p-6 relative z-10">
           {/* Skip button */}
           <div className="absolute top-4 right-4">
             <button
               onClick={handleSkip}
-              className="text-slate-400 hover:text-slate-600 text-sm font-medium"
+              className="text-white/60 hover:text-white text-sm font-medium"
             >
               Skip
             </button>
@@ -133,15 +158,12 @@ export default function WelcomePage() {
             </div>
 
             {/* Title */}
-            <h2 
-              className="text-2xl font-bold mb-4"
-              style={{ color: BRAND_COLORS.deepPurple }}
-            >
+            <h2 className="text-2xl font-bold mb-4 text-white">
               {INTRO_SLIDES[currentSlide - 1]?.title}
             </h2>
 
             {/* Description */}
-            <p className="text-slate-600 text-lg leading-relaxed">
+            <p className="text-white/80 text-lg leading-relaxed">
               {INTRO_SLIDES[currentSlide - 1]?.description}
             </p>
           </div>
@@ -154,14 +176,9 @@ export default function WelcomePage() {
                 onClick={() => setCurrentSlide(idx + 1)}
                 className={`h-2 rounded-full transition-all ${
                   currentSlide === idx + 1 
-                    ? 'w-8' 
-                    : 'w-2 opacity-40'
+                    ? 'w-8 bg-white' 
+                    : 'w-2 bg-white/40'
                 }`}
-                style={{ 
-                  backgroundColor: currentSlide === idx + 1 
-                    ? BRAND_COLORS.deepPurple 
-                    : BRAND_COLORS.magenta 
-                }}
               />
             ))}
           </div>
@@ -170,34 +187,20 @@ export default function WelcomePage() {
           <div className="flex gap-4 w-full max-w-xs">
             <button
               onClick={handleBack}
-              className="flex-1 py-3 px-6 rounded-full border-2 font-medium transition-all hover:bg-purple-50"
-              style={{ 
-                borderColor: BRAND_COLORS.deepPurple,
-                color: BRAND_COLORS.deepPurple,
-              }}
+              className="flex-1 py-3 px-6 rounded-full border-2 border-white/50 text-white font-medium transition-all hover:bg-white/10"
             >
               Back
             </button>
             <button
               onClick={handleNext}
-              className="flex-1 py-3 px-6 rounded-full text-white font-semibold shadow-lg hover:shadow-xl transition-all"
+              className="flex-1 py-3 px-6 rounded-full text-white font-semibold transition-all"
               style={{ 
-                background: `linear-gradient(135deg, ${BRAND_COLORS.deepPurple}, ${BRAND_COLORS.magenta})` 
+                background: `linear-gradient(135deg, ${BRAND_COLORS.magenta}, ${BRAND_COLORS.deepPurple})`,
+                boxShadow: '0 0 25px rgba(212, 165, 116, 0.35), 0 4px 15px rgba(0, 0, 0, 0.2)'
               }}
             >
               {isLastSlide ? "Let's Go!" : "Next"}
             </button>
-          </div>
-
-          {/* Microphone icon at bottom */}
-          <div className="mt-auto pt-8 opacity-30">
-            <Image
-              src="/branding/microphone-icon.png"
-              alt=""
-              width={60}
-              height={60}
-              className="w-12 h-auto"
-            />
           </div>
         </div>
       )}
