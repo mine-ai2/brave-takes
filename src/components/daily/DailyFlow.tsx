@@ -369,14 +369,14 @@ export default function DailyFlow({
         {/* Welcome Screen */}
         {step === 'welcome' && (
           <div 
-            className="fixed inset-0 flex flex-col items-center text-center px-6 overflow-auto"
+            className="fixed inset-0 z-50 flex flex-col items-center text-center px-6 overflow-auto"
             style={{
-              background: 'radial-gradient(circle at 50% 20%, #F7F2FF 0%, #e8d8ff 25%, #9B6CFF 50%, #4A1D8C 100%)'
+              background: 'radial-gradient(ellipse at 50% 0%, #F7F2FF 0%, #d4c4f7 20%, #9B6CFF 45%, #6B3FA0 70%, #4A1D8C 100%)'
             }}
           >
             {/* Sparkle overlay */}
             <div 
-              className="fixed inset-0 pointer-events-none"
+              className="fixed inset-0 pointer-events-none z-10"
               style={{
                 background: `
                   radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 8%),
@@ -393,10 +393,10 @@ export default function DailyFlow({
               }}
             />
             {/* Top spacing - 80px */}
-            <div style={{ height: '80px', flexShrink: 0 }} />
+            <div style={{ height: '80px', flexShrink: 0 }} className="relative z-20" />
             
-            {/* Logo */}
-            <div className="animate-fade-in" style={{ width: '220px' }}>
+            {/* Logo - transparent PNG on gradient */}
+            <div className="animate-fade-in relative z-20" style={{ width: '220px' }}>
               <Image
                 src="/branding/logo-main.png"
                 alt="Brave Takes"
@@ -411,7 +411,7 @@ export default function DailyFlow({
             <div style={{ height: '24px', flexShrink: 0 }} />
 
             {/* Tagline */}
-            <p className="text-sm text-slate-600 tracking-wide">
+            <p className="text-sm tracking-wide relative z-20" style={{ color: '#4A1D8C' }}>
               Confidence Training for Creative Visibility
             </p>
             
@@ -419,7 +419,7 @@ export default function DailyFlow({
             <div style={{ height: '8px', flexShrink: 0 }} />
             
             {/* Created by */}
-            <p className="text-sm italic" style={{ color: BRAND.colors.gold }}>
+            <p className="text-sm italic relative z-20" style={{ color: '#D4AF37' }}>
               Created by Carrie Farris
             </p>
 
@@ -428,8 +428,8 @@ export default function DailyFlow({
 
             {/* Headline */}
             <h1 
-              className="text-4xl font-bold leading-tight"
-              style={{ color: BRAND.colors.deepPurple }}
+              className="text-4xl font-bold leading-tight relative z-20"
+              style={{ color: '#4A1D8C' }}
             >
               Show Up.<br />
               Speak Up. Shine.
@@ -441,13 +441,13 @@ export default function DailyFlow({
             {/* Start Button */}
             <button
               onClick={() => setStep('emotion-slider')}
-              className="text-white font-semibold text-lg hover:scale-105 transition-transform active:scale-95"
+              className="text-white font-semibold text-lg hover:scale-105 transition-transform active:scale-95 relative z-20"
               style={{
-                background: BRAND.gradients.button,
+                background: 'linear-gradient(135deg, #7C3AED 0%, #5B21B6 50%, #4A1D8C 100%)',
                 width: '70%',
                 height: '56px',
                 borderRadius: '28px',
-                boxShadow: '0 0 60px rgba(212,175,55,0.25), 0 4px 15px rgba(91, 33, 182, 0.3)'
+                boxShadow: '0 0 60px rgba(212,175,55,0.25), 0 4px 20px rgba(74, 29, 140, 0.4)'
               }}
             >
               Start My Brave Take
@@ -457,7 +457,7 @@ export default function DailyFlow({
             <div style={{ height: '24px', flexShrink: 0 }} />
 
             {/* Helper text */}
-            <p className="text-sm text-slate-500">
+            <p className="text-sm relative z-20" style={{ color: '#6B3FA0' }}>
               Start your first Brave Take
             </p>
 
