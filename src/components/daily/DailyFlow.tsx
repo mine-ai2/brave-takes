@@ -402,7 +402,7 @@ export default function DailyFlow({
                   src="/branding/logo-main.png"
                   alt="Brave Takes"
                   width={220}
-                  height={140}
+                  height={80}
                   className="w-full h-auto"
                   priority
                 />
