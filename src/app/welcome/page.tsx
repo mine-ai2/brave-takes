@@ -116,8 +116,7 @@ export default function WelcomePage() {
             className="text-4xl font-bold text-center leading-tight mb-5"
             style={{ color: '#4A1D8C' }}
           >
-            Show Up.<br />
-            Speak Up. Shine.
+            Train. Show Up. Shine.
           </h1>
 
           {/* Start Button with gold glow - 20px below headline */}
