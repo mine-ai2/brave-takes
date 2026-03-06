@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { BRAND } from '@/lib/brand'
 
 interface Props {
-  current: 'today' | 'affirmations' | 'lounge' | 'progress' | 'settings'
+  current: 'today' | 'affirmations' | 'vault' | 'lounge' | 'progress' | 'settings'
 }
 
 const navItems = [
