@@ -1,13 +1,76 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { createClient } from '@/lib/supabase/client'
 
 export default function WelcomePage() {
   const router = useRouter()
+  const [checking, setChecking] = useState(true)
 
-  const handleStart = () => {
-    router.push('/onboarding')
+  useEffect(() => {
+    // Check if user is already logged in
+    const checkAuth = async () => {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      
+      if (user) {
+        // User is logged in, check if onboarding is complete
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('onboarding_complete')
+          .eq('id', user.id)
+          .single()
+        
+        if (profile?.onboarding_complete) {
+          // Already onboarded, go to today
+          router.push('/today')
+          return
+        }
+      }
+      
+      setChecking(false)
+    }
+    
+    checkAuth()
+  }, [router])
+
+  const handleStart = async () => {
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (user) {
+      // User is logged in, check onboarding status
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('onboarding_complete')
+        .eq('id', user.id)
+        .single()
+      
+      if (profile?.onboarding_complete) {
+        router.push('/today')
+      } else {
+        router.push('/onboarding')
+      }
+    } else {
+      // Not logged in, go to onboarding (will redirect to signup/login)
+      router.push('/onboarding')
+    }
+  }
+
+  // Show nothing while checking auth
+  if (checking) {
+    return (
+      <div 
+        className="min-h-screen flex items-center justify-center"
+        style={{
+          background: 'linear-gradient(180deg, #faf8ff 0%, #f5f0ff 15%, #efe6ff 30%, #e8dcff 50%, #dfd0f5 70%, #d4c4eb 85%, #c9b8e0 100%)'
+        }}
+      >
+        <div className="animate-pulse text-purple-600">Loading...</div>
+      </div>
+    )
   }
 
   return (
