@@ -57,7 +57,8 @@ export default function DailyFlow({
   // Determine initial state based on what's completed
   const getInitialStep = (): FlowStep => {
     if (structuredDone && creativeDone) return 'already-done'
-    return 'emotion-slider'  // Go straight to flow
+    if (skipWelcome) return 'emotion-slider'  // Skip welcome after onboarding
+    return 'welcome'  // Show welcome screen
   }
   
   // Determine initial mode - prefer the one not yet done
@@ -367,32 +368,83 @@ export default function DailyFlow({
         
         {/* Welcome Screen */}
         {step === 'welcome' && (
-          <div className="flex flex-col items-center justify-center min-h-[85vh] text-center">
-            {/* Brave Takes Logo */}
-            <div className="animate-fade-in px-4 mb-12">
+          <div 
+            className="fixed inset-0 flex flex-col items-center text-center px-6 overflow-auto"
+            style={{
+              background: 'radial-gradient(circle at 50% 20%, #f5ecff 0%, #e8d8ff 25%, #caa9ff 45%, #9c6cff 70%, #5a2ca0 100%)'
+            }}
+          >
+            {/* Top spacing - 80px */}
+            <div style={{ height: '80px', flexShrink: 0 }} />
+            
+            {/* Logo */}
+            <div className="animate-fade-in" style={{ width: '220px' }}>
               <Image
                 src="/branding/logo-main.png"
                 alt="Brave Takes"
-                width={500}
-                height={300}
-                className="w-full max-w-md mx-auto h-auto"
+                width={220}
+                height={140}
+                className="w-full h-auto"
                 priority
               />
             </div>
 
-            {/* Let's Go Button */}
+            {/* Spacing - 24px */}
+            <div style={{ height: '24px', flexShrink: 0 }} />
+
+            {/* Tagline */}
+            <p className="text-sm text-slate-600 tracking-wide">
+              Confidence Training for Creative Visibility
+            </p>
+            
+            {/* Spacing - 8px */}
+            <div style={{ height: '8px', flexShrink: 0 }} />
+            
+            {/* Created by */}
+            <p className="text-sm italic" style={{ color: BRAND.colors.gold }}>
+              Created by Carrie Farris
+            </p>
+
+            {/* Spacing - 48px */}
+            <div style={{ height: '48px', flexShrink: 0 }} />
+
+            {/* Headline */}
+            <h1 
+              className="text-4xl font-bold leading-tight"
+              style={{ color: BRAND.colors.deepPurple }}
+            >
+              Show Up.<br />
+              Speak Up. Shine.
+            </h1>
+
+            {/* Spacing - 48px */}
+            <div style={{ height: '48px', flexShrink: 0 }} />
+
+            {/* Start Button */}
             <button
               onClick={() => setStep('emotion-slider')}
-              className="hover:scale-105 transition-transform active:scale-95"
+              className="text-white font-semibold text-lg hover:scale-105 transition-transform active:scale-95"
+              style={{
+                background: BRAND.gradients.button,
+                width: '70%',
+                height: '56px',
+                borderRadius: '28px',
+                boxShadow: '0 4px 15px rgba(91, 33, 182, 0.3)'
+              }}
             >
-              <Image
-                src="/branding/lets-go-button.png"
-                alt="Let's Go!"
-                width={350}
-                height={100}
-                className="w-72 h-auto"
-              />
+              Start My Brave Take
             </button>
+
+            {/* Spacing - 24px */}
+            <div style={{ height: '24px', flexShrink: 0 }} />
+
+            {/* Helper text */}
+            <p className="text-sm text-slate-500">
+              Start your first Brave Take
+            </p>
+
+            {/* Bottom spacing */}
+            <div style={{ height: '48px', flexShrink: 0 }} />
           </div>
         )}
 
