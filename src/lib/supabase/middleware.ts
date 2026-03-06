@@ -39,7 +39,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Public routes
-  const publicRoutes = ['/login', '/signup', '/auth/callback', '/auth/confirm']
+  const publicRoutes = ['/login', '/signup', '/auth/callback', '/auth/confirm', '/welcome']
   const isPublicRoute = publicRoutes.some(route => request.nextUrl.pathname.startsWith(route))
 
   if (!user && !isPublicRoute) {
