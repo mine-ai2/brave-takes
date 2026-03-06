@@ -57,8 +57,7 @@ export default function DailyFlow({
   // Determine initial state based on what's completed
   const getInitialStep = (): FlowStep => {
     if (structuredDone && creativeDone) return 'already-done'
-    if (skipWelcome) return 'emotion-slider'  // Skip welcome after onboarding
-    return 'welcome'  // Show welcome screen for returning users
+    return 'emotion-slider'  // Go straight to flow
   }
   
   // Determine initial mode - prefer the one not yet done
