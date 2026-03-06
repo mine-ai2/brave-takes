@@ -369,14 +369,14 @@ export default function DailyFlow({
         {/* Welcome Screen */}
         {step === 'welcome' && (
           <div 
-            className="fixed inset-0 z-50 flex flex-col items-center text-center px-6 overflow-auto"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center text-center px-6"
             style={{
-              background: 'radial-gradient(ellipse at 50% 0%, #F7F2FF 0%, #d4c4f7 20%, #9B6CFF 45%, #6B3FA0 70%, #4A1D8C 100%)'
+              background: 'radial-gradient(ellipse 120% 80% at 50% 20%, #F5F0FF 0%, #E2D4F7 15%, #C4A8F0 30%, #9B6CFF 50%, #7C3AED 65%, #5B21B6 80%, #4A1D8C 100%)'
             }}
           >
             {/* Sparkle overlay */}
             <div 
-              className="fixed inset-0 pointer-events-none z-10"
+              className="fixed inset-0 pointer-events-none"
               style={{
                 background: `
                   radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 8%),
@@ -389,80 +389,79 @@ export default function DailyFlow({
                   radial-gradient(circle at 50% 90%, rgba(255,255,255,0.3) 0%, transparent 8%),
                   radial-gradient(circle at 60% 40%, rgba(255,255,255,0.2) 0%, transparent 4%)
                 `,
-                opacity: 0.25
+                opacity: 0.3,
+                zIndex: 1
               }}
             />
-            {/* Top spacing - 80px */}
-            <div style={{ height: '80px', flexShrink: 0 }} className="relative z-20" />
             
-            {/* Logo - transparent PNG on gradient */}
-            <div className="animate-fade-in relative z-20" style={{ width: '220px' }}>
-              <Image
-                src="/branding/logo-main.png"
-                alt="Brave Takes"
-                width={220}
-                height={140}
-                className="w-full h-auto"
-                priority
-              />
+            {/* Content container - centered */}
+            <div className="relative z-10 flex flex-col items-center" style={{ marginTop: '-40px' }}>
+              {/* Logo - transparent PNG on gradient */}
+              <div className="animate-fade-in" style={{ width: '220px' }}>
+                <Image
+                  src="/branding/logo-main.png"
+                  alt="Brave Takes"
+                  width={220}
+                  height={140}
+                  className="w-full h-auto"
+                  priority
+                />
+              </div>
+
+              {/* Spacing - 24px */}
+              <div style={{ height: '24px' }} />
+
+              {/* Tagline */}
+              <p className="text-sm tracking-wide" style={{ color: '#4A1D8C' }}>
+                Confidence Training for Creative Visibility
+              </p>
+              
+              {/* Spacing - 8px */}
+              <div style={{ height: '8px' }} />
+              
+              {/* Created by */}
+              <p className="text-sm italic" style={{ color: '#D4AF37' }}>
+                Created by Carrie Farris
+              </p>
+
+              {/* Spacing - 48px */}
+              <div style={{ height: '48px' }} />
+
+              {/* Headline */}
+              <h1 
+                className="text-4xl font-bold leading-tight"
+                style={{ color: '#4A1D8C' }}
+              >
+                Show Up.<br />
+                Speak Up. Shine.
+              </h1>
+
+              {/* Spacing - 48px */}
+              <div style={{ height: '48px' }} />
+
+              {/* Start Button - deeper purple gradient */}
+              <button
+                onClick={() => setStep('emotion-slider')}
+                className="text-white font-semibold text-lg hover:scale-105 transition-transform active:scale-95"
+                style={{
+                  background: 'linear-gradient(135deg, #6B21A8 0%, #5B21B6 40%, #4C1D95 70%, #3B0764 100%)',
+                  width: '280px',
+                  height: '56px',
+                  borderRadius: '28px',
+                  boxShadow: '0 0 60px rgba(212,175,55,0.2), 0 8px 32px rgba(59, 7, 100, 0.5)'
+                }}
+              >
+                Start My Brave Take
+              </button>
+
+              {/* Spacing - 24px */}
+              <div style={{ height: '24px' }} />
+
+              {/* Helper text */}
+              <p className="text-sm" style={{ color: 'rgba(255,255,255,0.7)' }}>
+                Begin your daily practice
+              </p>
             </div>
-
-            {/* Spacing - 24px */}
-            <div style={{ height: '24px', flexShrink: 0 }} />
-
-            {/* Tagline */}
-            <p className="text-sm tracking-wide relative z-20" style={{ color: '#4A1D8C' }}>
-              Confidence Training for Creative Visibility
-            </p>
-            
-            {/* Spacing - 8px */}
-            <div style={{ height: '8px', flexShrink: 0 }} />
-            
-            {/* Created by */}
-            <p className="text-sm italic relative z-20" style={{ color: '#D4AF37' }}>
-              Created by Carrie Farris
-            </p>
-
-            {/* Spacing - 48px */}
-            <div style={{ height: '48px', flexShrink: 0 }} />
-
-            {/* Headline */}
-            <h1 
-              className="text-4xl font-bold leading-tight relative z-20"
-              style={{ color: '#4A1D8C' }}
-            >
-              Show Up.<br />
-              Speak Up. Shine.
-            </h1>
-
-            {/* Spacing - 48px */}
-            <div style={{ height: '48px', flexShrink: 0 }} />
-
-            {/* Start Button */}
-            <button
-              onClick={() => setStep('emotion-slider')}
-              className="text-white font-semibold text-lg hover:scale-105 transition-transform active:scale-95 relative z-20"
-              style={{
-                background: 'linear-gradient(135deg, #7C3AED 0%, #5B21B6 50%, #4A1D8C 100%)',
-                width: '70%',
-                height: '56px',
-                borderRadius: '28px',
-                boxShadow: '0 0 60px rgba(212,175,55,0.25), 0 4px 20px rgba(74, 29, 140, 0.4)'
-              }}
-            >
-              Start My Brave Take
-            </button>
-
-            {/* Spacing - 24px */}
-            <div style={{ height: '24px', flexShrink: 0 }} />
-
-            {/* Helper text */}
-            <p className="text-sm relative z-20" style={{ color: '#6B3FA0' }}>
-              Start your first Brave Take
-            </p>
-
-            {/* Bottom spacing */}
-            <div style={{ height: '48px', flexShrink: 0 }} />
           </div>
         )}
 
