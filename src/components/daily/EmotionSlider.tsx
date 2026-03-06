@@ -32,7 +32,7 @@ export default function EmotionSlider({ onContinue }: Props) {
     <div className="bg-white rounded-3xl shadow-xl p-6 border border-purple-100">
       <div className="text-center mb-8">
         <h2 className="text-2xl font-bold mb-2" style={{ color: BRAND.colors.deepPurple }}>
-          Mood Check
+          How are you feeling?
         </h2>
         <p className="text-slate-500 text-sm">
           Slide to check in before we begin
