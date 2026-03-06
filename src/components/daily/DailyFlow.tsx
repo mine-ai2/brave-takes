@@ -374,6 +374,24 @@ export default function DailyFlow({
               background: 'radial-gradient(circle at 50% 20%, #f5ecff 0%, #e8d8ff 25%, #caa9ff 45%, #9c6cff 70%, #5a2ca0 100%)'
             }}
           >
+            {/* Sparkle overlay */}
+            <div 
+              className="fixed inset-0 pointer-events-none"
+              style={{
+                background: `
+                  radial-gradient(circle at 20% 30%, rgba(255,255,255,0.4) 0%, transparent 8%),
+                  radial-gradient(circle at 80% 20%, rgba(255,255,255,0.3) 0%, transparent 6%),
+                  radial-gradient(circle at 40% 60%, rgba(255,255,255,0.35) 0%, transparent 5%),
+                  radial-gradient(circle at 70% 70%, rgba(255,255,255,0.25) 0%, transparent 7%),
+                  radial-gradient(circle at 30% 80%, rgba(255,255,255,0.3) 0%, transparent 4%),
+                  radial-gradient(circle at 90% 50%, rgba(255,255,255,0.2) 0%, transparent 5%),
+                  radial-gradient(circle at 10% 50%, rgba(255,255,255,0.25) 0%, transparent 6%),
+                  radial-gradient(circle at 50% 90%, rgba(255,255,255,0.3) 0%, transparent 8%),
+                  radial-gradient(circle at 60% 40%, rgba(255,255,255,0.2) 0%, transparent 4%)
+                `,
+                opacity: 0.25
+              }}
+            />
             {/* Top spacing - 80px */}
             <div style={{ height: '80px', flexShrink: 0 }} />
             
