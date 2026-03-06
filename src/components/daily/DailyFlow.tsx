@@ -447,7 +447,7 @@ export default function DailyFlow({
                 width: '70%',
                 height: '56px',
                 borderRadius: '28px',
-                boxShadow: '0 4px 15px rgba(91, 33, 182, 0.3)'
+                boxShadow: '0 0 60px rgba(212,175,55,0.25), 0 4px 15px rgba(91, 33, 182, 0.3)'
               }}
             >
               Start My Brave Take
