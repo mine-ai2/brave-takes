@@ -27,12 +27,19 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  let user = null
+  try {
+    const { data, error } = await supabase.auth.getUser()
+    if (!error) {
+      user = data.user
+    }
+  } catch {
+    // Auth error (e.g., invalid refresh token) - treat as logged out
+    console.log('Auth error in middleware, redirecting to login')
+  }
 
   // Public routes
-  const publicRoutes = ['/login', '/auth/callback']
+  const publicRoutes = ['/login', '/signup', '/auth/callback', '/auth/confirm']
   const isPublicRoute = publicRoutes.some(route => request.nextUrl.pathname.startsWith(route))
 
   if (!user && !isPublicRoute) {
