@@ -4,15 +4,15 @@ import Link from 'next/link'
 import { BRAND } from '@/lib/brand'
 
 interface Props {
-  current: 'today' | 'affirmations' | 'vault' | 'lounge' | 'progress' | 'settings'
+  current: 'today' | 'affirmations' | 'lounge' | 'progress' | 'settings'
 }
 
 const navItems = [
   { id: 'today', label: 'Today', icon: '🎯', href: '/today' },
   { id: 'affirmations', label: 'Affirm', icon: '✨', href: '/affirmations' },
-  { id: 'vault', label: 'Vault', icon: '💡', href: '/vault' },
   { id: 'lounge', label: 'Lounge', icon: '💬', href: '/lounge' },
   { id: 'progress', label: 'Progress', icon: '📊', href: '/progress' },
+  { id: 'settings', label: 'Settings', icon: '⚙️', href: '/settings' },
 ]
 
 export default function Navigation({ current, hidden = false }: Props & { hidden?: boolean }) {
