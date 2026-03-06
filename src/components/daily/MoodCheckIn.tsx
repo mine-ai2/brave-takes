@@ -15,7 +15,7 @@ export default function MoodCheckIn({
     <div className="bg-white rounded-3xl shadow-xl p-6 border border-slate-100">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-slate-800 mb-2">
-          How are you feeling?
+          Mood Check
         </h2>
         <p className="text-slate-500 text-sm">
           Check in before we begin
