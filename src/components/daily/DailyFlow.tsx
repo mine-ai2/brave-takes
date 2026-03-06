@@ -368,46 +368,49 @@ export default function DailyFlow({
         
         {/* Welcome Screen */}
         {step === 'welcome' && (
-          <div className="flex flex-col items-center min-h-[90vh] text-center pt-4">
-            {/* Logo - Big at top */}
-            <div className="mb-2 animate-fade-in">
-              <Image
-                src="/branding/logo-main.png"
-                alt="Brave Takes"
-                width={400}
-                height={250}
-                className="w-full max-w-md h-auto"
-                priority
-              />
+          <div className="flex flex-col items-center justify-between min-h-[92vh] text-center">
+            {/* Top Section: Logo + Banner */}
+            <div className="w-full">
+              {/* Logo - Big at top */}
+              <div className="animate-fade-in px-4">
+                <Image
+                  src="/branding/logo-main.png"
+                  alt="Brave Takes"
+                  width={500}
+                  height={300}
+                  className="w-full max-w-lg mx-auto h-auto"
+                  priority
+                />
+              </div>
+
+              {/* Train Show Up Shine Banner - Full width, right below logo */}
+              <div className="w-full -mt-4">
+                <Image
+                  src="/branding/tagline-banner.png"
+                  alt="Train • Show Up • Shine"
+                  width={800}
+                  height={150}
+                  className="w-full h-auto"
+                />
+              </div>
             </div>
 
-            {/* Train Show Up Shine Banner - Full width */}
-            <div className="w-full mb-auto">
-              <Image
-                src="/branding/tagline-banner.png"
-                alt="Train • Show Up • Shine"
-                width={600}
-                height={120}
-                className="w-full h-auto"
-              />
-            </div>
-
-            {/* Let's Go Button - Centered */}
+            {/* Middle Section: Let's Go Button */}
             <button
               onClick={() => setStep('emotion-slider')}
-              className="hover:scale-105 transition-transform active:scale-95 mb-auto"
+              className="hover:scale-105 transition-transform active:scale-95 my-8"
             >
               <Image
                 src="/branding/lets-go-button.png"
                 alt="Let's Go!"
-                width={320}
-                height={90}
-                className="w-72 h-auto"
+                width={350}
+                height={100}
+                className="w-80 h-auto"
               />
             </button>
 
             {/* Footer */}
-            <div className="mt-auto pb-6 text-center">
+            <div className="pb-4 text-center">
               <p 
                 className="text-sm tracking-widest mb-2 uppercase"
                 style={{ color: BRAND.colors.deepPurple }}
@@ -418,9 +421,9 @@ export default function DailyFlow({
               <Image
                 src="/branding/created-by-footer.png"
                 alt="Created by Carrie Farris"
-                width={300}
-                height={50}
-                className="w-64 h-auto mx-auto"
+                width={280}
+                height={45}
+                className="w-56 h-auto mx-auto"
               />
             </div>
           </div>
