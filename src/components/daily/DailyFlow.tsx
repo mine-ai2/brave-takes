@@ -371,7 +371,7 @@ export default function DailyFlow({
           <div 
             className="fixed inset-0 flex flex-col items-center text-center px-6 overflow-auto"
             style={{
-              background: 'radial-gradient(circle at 50% 20%, #f5ecff 0%, #e8d8ff 25%, #caa9ff 45%, #9c6cff 70%, #5a2ca0 100%)'
+              background: 'radial-gradient(circle at 50% 20%, #F7F2FF 0%, #e8d8ff 25%, #9B6CFF 50%, #4A1D8C 100%)'
             }}
           >
             {/* Sparkle overlay */}
