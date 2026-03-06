@@ -368,64 +368,32 @@ export default function DailyFlow({
         
         {/* Welcome Screen */}
         {step === 'welcome' && (
-          <div className="flex flex-col items-center justify-between min-h-[92vh] text-center">
-            {/* Top Section: Logo + Banner */}
-            <div className="w-full">
-              {/* Logo - Big at top */}
-              <div className="animate-fade-in px-4">
-                <Image
-                  src="/branding/logo-main.png"
-                  alt="Brave Takes"
-                  width={500}
-                  height={300}
-                  className="w-full max-w-lg mx-auto h-auto"
-                  priority
-                />
-              </div>
-
-              {/* Train Show Up Shine Banner - Full width, right below logo */}
-              <div className="w-full -mt-4">
-                <Image
-                  src="/branding/tagline-banner.png"
-                  alt="Train • Show Up • Shine"
-                  width={800}
-                  height={150}
-                  className="w-full h-auto"
-                />
-              </div>
+          <div className="flex flex-col items-center justify-center min-h-[85vh] text-center">
+            {/* Brave Takes Logo */}
+            <div className="animate-fade-in px-4 mb-12">
+              <Image
+                src="/branding/logo-main.png"
+                alt="Brave Takes"
+                width={500}
+                height={300}
+                className="w-full max-w-md mx-auto h-auto"
+                priority
+              />
             </div>
 
-            {/* Middle Section: Let's Go Button */}
+            {/* Let's Go Button */}
             <button
               onClick={() => setStep('emotion-slider')}
-              className="hover:scale-105 transition-transform active:scale-95 my-8"
+              className="hover:scale-105 transition-transform active:scale-95"
             >
               <Image
                 src="/branding/lets-go-button.png"
                 alt="Let's Go!"
                 width={350}
                 height={100}
-                className="w-80 h-auto"
+                className="w-72 h-auto"
               />
             </button>
-
-            {/* Footer */}
-            <div className="pb-4 text-center">
-              <p 
-                className="text-sm tracking-widest mb-2 uppercase"
-                style={{ color: BRAND.colors.deepPurple }}
-              >
-                Confidence Training for{' '}
-                <span style={{ color: BRAND.colors.teal }}>Creative Visibility</span>
-              </p>
-              <Image
-                src="/branding/created-by-footer.png"
-                alt="Created by Carrie Farris"
-                width={280}
-                height={45}
-                className="w-56 h-auto mx-auto"
-              />
-            </div>
           </div>
         )}
 
