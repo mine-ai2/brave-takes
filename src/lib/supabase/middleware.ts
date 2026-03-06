@@ -38,8 +38,8 @@ export async function updateSession(request: NextRequest) {
     console.log('Auth error in middleware, redirecting to login')
   }
 
-  // Public routes
-  const publicRoutes = ['/login', '/signup', '/auth/callback', '/auth/confirm']
+  // Public routes (root is the welcome/landing page)
+  const publicRoutes = ['/', '/login', '/signup', '/auth/callback', '/auth/confirm']
   const isPublicRoute = publicRoutes.some(route => request.nextUrl.pathname.startsWith(route))
 
   if (!user && !isPublicRoute) {
@@ -48,10 +48,10 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // If logged in and on login page, redirect to welcome
+  // If logged in and on login page, redirect to home (welcome)
   if (user && request.nextUrl.pathname === '/login') {
     const url = request.nextUrl.clone()
-    url.pathname = '/welcome'
+    url.pathname = '/'
     return NextResponse.redirect(url)
   }
 

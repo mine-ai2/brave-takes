@@ -5,7 +5,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
   const code = searchParams.get('code')
   const type = searchParams.get('type')
-  const next = searchParams.get('next') ?? '/welcome'
+  const next = searchParams.get('next') ?? '/'
   
   // Use production URL - don't rely on request.url origin behind proxies
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://app.bravetakes.com'
