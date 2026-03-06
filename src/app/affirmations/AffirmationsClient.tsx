@@ -103,29 +103,6 @@ export default function AffirmationsClient({ moods, currentStreak, displayName }
           </button>
         </div>
 
-        {/* All Affirmations List */}
-        <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-6 shadow-lg border border-purple-100">
-          <h2 className="text-lg font-semibold mb-4" style={{ color: '#4a2c7a' }}>
-            All Affirmations
-          </h2>
-          
-          <div className="space-y-4">
-            {affirmations.map((aff, idx) => (
-              <div 
-                key={idx}
-                className="p-4 rounded-xl bg-white/70 border border-purple-50"
-              >
-                <div className="flex items-start gap-3">
-                  <span className="text-xl">{aff.emoji}</span>
-                  <div>
-                    <p className="text-slate-700 font-medium">{aff.text}</p>
-                    <p className="text-sm text-slate-400 mt-1">{aff.mood}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   )
