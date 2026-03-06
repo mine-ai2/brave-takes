@@ -10,6 +10,7 @@ interface Props {
 const navItems = [
   { id: 'today', label: 'Today', icon: '🎯', href: '/today' },
   { id: 'affirmations', label: 'Affirm', icon: '✨', href: '/affirmations' },
+  { id: 'vault', label: 'Vault', icon: '💡', href: '/vault' },
   { id: 'lounge', label: 'Lounge', icon: '💬', href: '/lounge' },
   { id: 'progress', label: 'Progress', icon: '📊', href: '/progress' },
   { id: 'settings', label: 'Settings', icon: '⚙️', href: '/settings' },
