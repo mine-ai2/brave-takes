@@ -8,7 +8,13 @@ import type { Profile, Track, TrackMission, Platform, PlatformPrompt, CreativePr
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export default async function TodayPage() {
+export default async function TodayPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ from?: string }>
+}) {
+  const params = await searchParams
+  const skipWelcome = params.from === 'onboarding'
   const supabase = await createClient()
   
   const { data: { user } } = await supabase.auth.getUser()
@@ -104,6 +110,7 @@ export default async function TodayPage() {
         creativeDone={creativeDone}
         currentStreak={streak?.current_streak || 0}
         longestStreak={streak?.longest_streak || 0}
+        skipWelcome={skipWelcome}
       />
       <Navigation current="today" />
     </>

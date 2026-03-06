@@ -32,6 +32,7 @@ interface Props {
   creativeDone: boolean
   currentStreak: number
   longestStreak: number
+  skipWelcome?: boolean
 }
 
 export default function DailyFlow({
@@ -48,6 +49,7 @@ export default function DailyFlow({
   creativeDone,
   currentStreak,
   longestStreak,
+  skipWelcome = false,
 }: Props) {
   const router = useRouter()
   const supabase = createClient()
@@ -55,7 +57,8 @@ export default function DailyFlow({
   // Determine initial state based on what's completed
   const getInitialStep = (): FlowStep => {
     if (structuredDone && creativeDone) return 'already-done'
-    return 'welcome'  // Always start with welcome screen
+    if (skipWelcome) return 'emotion-slider'  // Skip welcome after onboarding
+    return 'welcome'  // Show welcome screen for returning users
   }
   
   // Determine initial mode - prefer the one not yet done

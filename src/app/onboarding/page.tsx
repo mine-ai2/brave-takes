@@ -75,7 +75,7 @@ export default function OnboardingPage() {
       return
     }
 
-    router.push('/today')
+    router.push('/today?from=onboarding')
   }
 
   const getTrackColors = (color: string) => {
