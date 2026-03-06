@@ -39,7 +39,7 @@ export async function updateSession(request: NextRequest) {
   }
 
   // Public routes
-  const publicRoutes = ['/login', '/signup', '/auth/callback', '/auth/confirm', '/welcome']
+  const publicRoutes = ['/login', '/signup', '/auth/callback', '/auth/confirm']
   const isPublicRoute = publicRoutes.some(route => request.nextUrl.pathname.startsWith(route))
 
   if (!user && !isPublicRoute) {
@@ -48,10 +48,10 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
-  // If logged in and on login page, redirect to today
+  // If logged in and on login page, redirect to welcome
   if (user && request.nextUrl.pathname === '/login') {
     const url = request.nextUrl.clone()
-    url.pathname = '/today'
+    url.pathname = '/welcome'
     return NextResponse.redirect(url)
   }
 
