@@ -1,10 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import Image from 'next/image'
 import { BRAND } from '@/lib/brand'
+import { Turnstile, type TurnstileInstance } from '@marsidev/react-turnstile'
+
+const TURNSTILE_SITE_KEY = '0x4AAAAAACwZ8HNMbJdEJyUH'
 
 type AuthMode = 'login' | 'signup' | 'forgot' | 'magic'
 
@@ -16,19 +19,32 @@ export default function LoginPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const turnstileRef = useRef<TurnstileInstance>(null)
   
   const supabase = createClient()
 
+  const resetCaptcha = () => {
+    setCaptchaToken(null)
+    turnstileRef.current?.reset()
+  }
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!captchaToken) {
+      setMessage({ type: 'error', text: 'Please complete the captcha' })
+      return
+    }
     setLoading(true)
     setMessage(null)
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
+      options: { captchaToken },
     })
 
+    resetCaptcha()
     if (error) {
       setMessage({ type: 'error', text: error.message })
       setLoading(false)
@@ -40,6 +56,10 @@ export default function LoginPage() {
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!captchaToken) {
+      setMessage({ type: 'error', text: 'Please complete the captcha' })
+      return
+    }
     setLoading(true)
     setMessage(null)
 
@@ -60,9 +80,11 @@ export default function LoginPage() {
       password,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
+        captchaToken,
       },
     })
 
+    resetCaptcha()
     if (error) {
       setMessage({ type: 'error', text: error.message })
     } else {
@@ -73,13 +95,19 @@ export default function LoginPage() {
 
   const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!captchaToken) {
+      setMessage({ type: 'error', text: 'Please complete the captcha' })
+      return
+    }
     setLoading(true)
     setMessage(null)
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
+      captchaToken,
     })
 
+    resetCaptcha()
     if (error) {
       setMessage({ type: 'error', text: error.message })
     } else {
@@ -90,6 +118,10 @@ export default function LoginPage() {
 
   const handleMagicLink = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!captchaToken) {
+      setMessage({ type: 'error', text: 'Please complete the captcha' })
+      return
+    }
     setLoading(true)
     setMessage(null)
 
@@ -97,9 +129,11 @@ export default function LoginPage() {
       email,
       options: {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
+        captchaToken,
       },
     })
 
+    resetCaptcha()
     if (error) {
       setMessage({ type: 'error', text: error.message })
     } else {
@@ -113,6 +147,7 @@ export default function LoginPage() {
     setPassword('')
     setConfirmPassword('')
     setMessage(null)
+    resetCaptcha()
   }
 
   const inputStyles = `w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-purple-400 focus:ring-2 focus:ring-purple-100 outline-none transition-all text-slate-800 placeholder-slate-400`
@@ -373,6 +408,17 @@ export default function LoginPage() {
             </form>
           )}
           
+          {/* Turnstile CAPTCHA */}
+          <div className="mt-4 flex justify-center">
+            <Turnstile
+              ref={turnstileRef}
+              siteKey={TURNSTILE_SITE_KEY}
+              onSuccess={(token) => setCaptchaToken(token)}
+              onExpire={() => setCaptchaToken(null)}
+              options={{ theme: 'light', size: 'normal' }}
+            />
+          </div>
+
           {/* Message Display */}
           {message && (
             <div className={`mt-4 p-4 rounded-xl text-center text-sm ${
